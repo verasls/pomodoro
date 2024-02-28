@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import StyledComponentsRegistry from "@/lib/registry";
 import GlobalStyles from "./GlobalStyles";
+import "@/app/index.css";
 
 export const metadata: Metadata = {
   title: "Pomodoro",

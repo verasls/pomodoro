@@ -15,6 +15,10 @@ const styles = css`
     text-size-adjust: none;
   }
 
+  body {
+    font-family: "Rubik", sans-serif;
+  }
+
   body,
   h1,
   h2,
