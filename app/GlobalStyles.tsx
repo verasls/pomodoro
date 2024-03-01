@@ -3,6 +3,16 @@
 import { createGlobalStyle, css } from "styled-components";
 
 const styles = css`
+  :root {
+    &,
+    &.light-mode {
+      --text-color: #343a40;
+      --primary-color: #f1f3f5;
+      --accent-color: #fa5252;
+      --white: #f8f9fa;
+    }
+  }
+
   *,
   *::before,
   *::after {
@@ -17,6 +27,7 @@ const styles = css`
 
   body {
     font-family: "Rubik", sans-serif;
+    color: var(--text-color);
   }
 
   body,
@@ -160,6 +171,12 @@ const styles = css`
 
   :target {
     scroll-margin-block: 5ex;
+  }
+
+  button {
+    border: none;
+    background: transparent;
+    color: inherit;
   }
 `;
 
