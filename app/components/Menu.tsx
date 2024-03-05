@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import MenuButton from "./MenuButton";
-import { useState } from "react";
 
 const MenuContainer = styled.div`
   display: grid;
@@ -12,14 +11,10 @@ const MenuContainer = styled.div`
   padding: 5px;
 `;
 
-const menuItems = ["Work", "Short break", "Long break"];
-
 export default function Menu() {
   return (
     <MenuContainer>
-      {menuItems.map((item) => (
-        <MenuButton key={item}>{item}</MenuButton>
-      ))}
+      <MenuButton />
     </MenuContainer>
   );
 }
