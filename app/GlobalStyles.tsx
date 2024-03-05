@@ -6,10 +6,12 @@ const styles = css`
   :root {
     &,
     &.light-mode {
+      --bg-color: #fff;
       --text-color: #343a40;
       --primary-color: #f1f3f5;
       --accent-color: #fa5252;
       --white: #f8f9fa;
+      --shadow: 10px 20px 30px 0px rgba(0, 0, 0, 0.15);
     }
   }
 
@@ -40,6 +42,7 @@ const styles = css`
   blockquote,
   dl,
   dd {
+    margin-block-start: 0;
     margin-block-end: 0;
   }
 
