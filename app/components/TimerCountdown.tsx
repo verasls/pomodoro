@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import useTimer from "../hooks/useTimer";
 
 const Countdown = styled.p`
   font-size: 4.8rem;
@@ -6,5 +7,7 @@ const Countdown = styled.p`
 `;
 
 export default function TimerCountdown() {
-  return <Countdown>25:00</Countdown>;
+  const time = useTimer(10);
+
+  return <Countdown>{time}</Countdown>;
 }
