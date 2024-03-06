@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import Heading from "./components/Heading";
 import Menu from "./components/Menu";
-import Timer from "./components/Timer";
+import PomodoroTimer from "./components/PomodoroTimer";
 
 const Main = styled.main`
   display: flex;
@@ -17,7 +17,7 @@ export default function Page() {
     <Main>
       <Heading as="h1">Pomodoro</Heading>
       <Menu />
-      <Timer />
+      <PomodoroTimer />
     </Main>
   );
 }
