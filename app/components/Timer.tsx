@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from "react";
 import styled from "styled-components";
 import useTimer from "../hooks/useTimer";
+import { Pause, Play, RefreshCcw } from "lucide-react";
 
 const TimerWrapper = styled.div`
   display: flex;
@@ -47,6 +48,10 @@ const StyledCountdown = styled.p`
 
 type TimerContextValue = {
   time: number;
+  isPaused: boolean;
+  play: () => void;
+  pause: () => void;
+  reset: () => void;
 };
 
 const TimerContext = createContext<TimerContextValue | undefined>(undefined);
@@ -63,10 +68,12 @@ type ChildrenProp = {
 };
 
 function Timer({ children }: ChildrenProp) {
-  const time = useTimer(10);
+  const { time, isPaused, play, pause, reset } = useTimer(10);
 
   return (
-    <TimerContext.Provider value={{ time }}>{children}</TimerContext.Provider>
+    <TimerContext.Provider value={{ time, isPaused, play, pause, reset }}>
+      {children}
+    </TimerContext.Provider>
   );
 }
 
@@ -95,8 +102,32 @@ function Countdown({ children }: ChildrenProp) {
   );
 }
 
-function Button({ children }: ChildrenProp) {
-  return <button>{children}</button>;
+const StyledButton = styled.button`
+  cursor: pointer;
+`;
+
+type ButtonProps = {
+  type: "play-pause" | "reset";
+};
+
+function Button({ type }: ButtonProps) {
+  const { isPaused, play, pause, reset } = useTimerContext();
+
+  if (type === "play-pause") {
+    return (
+      <StyledButton onClick={isPaused ? () => play() : () => pause()}>
+        {isPaused ? <Play size={36} /> : <Pause size={36} />}
+      </StyledButton>
+    );
+  }
+
+  if (type === "reset") {
+    return (
+      <StyledButton onClick={() => reset()}>
+        <RefreshCcw size={36} />
+      </StyledButton>
+    );
+  }
 }
 
 Timer.Display = Display;

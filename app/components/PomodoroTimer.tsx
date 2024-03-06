@@ -1,4 +1,3 @@
-import { Play, RotateCcw } from "lucide-react";
 import Timer from "./Timer";
 
 export default function PomodoroTimer() {
@@ -8,12 +7,8 @@ export default function PomodoroTimer() {
         <Timer.ProgressBar />
         <Timer.Countdown>
           <Timer.Options>
-            <Timer.Button>
-              <Play size={36} />
-            </Timer.Button>
-            <Timer.Button>
-              <RotateCcw size={36} />
-            </Timer.Button>
+            <Timer.Button type="play-pause" />
+            <Timer.Button type="reset" />
           </Timer.Options>
         </Timer.Countdown>
       </Timer.Display>
