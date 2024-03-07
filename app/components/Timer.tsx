@@ -1,7 +1,8 @@
 import React, { createContext, useContext } from "react";
 import styled from "styled-components";
-import useTimer from "../hooks/useTimer";
 import { Pause, Play, RefreshCcw } from "lucide-react";
+import useTimer from "../hooks/useTimer";
+import { WORK_TIME } from "../utils/constants";
 
 const TimerWrapper = styled.div`
   display: flex;
@@ -68,7 +69,7 @@ type ChildrenProp = {
 };
 
 function Timer({ children }: ChildrenProp) {
-  const { time, isPaused, play, pause, reset } = useTimer(10);
+  const { time, isPaused, play, pause, reset } = useTimer(WORK_TIME);
 
   return (
     <TimerContext.Provider value={{ time, isPaused, play, pause, reset }}>
