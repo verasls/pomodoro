@@ -38,8 +38,10 @@ const Circle = styled.circle`
   fill: transparent;
   stroke: var(--accent-color);
   stroke-width: 4px;
-  stroke-dasharray: 283;
   stroke-linecap: round;
+  transition:
+    stroke-dasharray 1s linear,
+    stroke 0.5s ease;
 `;
 
 const StyledCountdown = styled.p`
@@ -83,10 +85,18 @@ function Display({ children }: ChildrenProp) {
 }
 
 function ProgressBar() {
+  const { time } = useTimerContext();
+  const totalTime = WORK_TIME;
+
   return (
     <Svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <g>
-        <Circle r="45" cx="50" cy="50"></Circle>
+        <Circle
+          r="45"
+          cx="50"
+          cy="50"
+          strokeDasharray={`${(time / totalTime) * 283}, 283`}
+        ></Circle>
       </g>
     </Svg>
   );
