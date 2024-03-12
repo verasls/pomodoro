@@ -11,7 +11,8 @@ const styles = css`
       --primary-color: #f1f3f5;
       --accent-color: #fa5252;
       --white: #f8f9fa;
-      --shadow: 10px 20px 30px 0px rgba(0, 0, 0, 0.15);
+      --shadow-small: 5px 10px 30px 0px rgba(0, 0, 0, 0.15);
+      --shadow-large: 10px 20px 30px 0px rgba(0, 0, 0, 0.15);
     }
   }
 

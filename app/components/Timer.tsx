@@ -18,8 +18,9 @@ const TimerWrapper = styled.div`
   border-radius: 50%;
   width: 95%;
   max-width: 20rem;
+  margin: 1rem 0;
   background-color: var(--primary-color);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-large);
 `;
 
 const TimerContainer = styled.div`

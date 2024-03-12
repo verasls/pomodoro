@@ -7,6 +7,7 @@ const MenuContainer = styled.div`
   gap: 1rem;
   background-color: var(--primary-color);
   border-radius: 50px;
+  box-shadow: var(--shadow-small);
   margin: 1.6rem 0;
   padding: 5px;
 `;

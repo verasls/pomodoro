@@ -18,6 +18,7 @@ const Heading = styled.h1<HeadingProps>`
       : ""
   };
   font-weight: 500;
+  margin: 1rem 0
   `}
 `;
 
