@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Heading from "./components/Heading";
 import Menu from "./components/Menu";
 import PomodoroTimer from "./components/PomodoroTimer";
+import { PomodoroProvider } from "./context/PomodoroContext";
 
 const Main = styled.main`
   display: flex;
@@ -16,8 +17,10 @@ export default function Page() {
   return (
     <Main>
       <Heading as="h1">Pomodoro</Heading>
-      <Menu />
-      <PomodoroTimer />
+      <PomodoroProvider>
+        <Menu />
+        <PomodoroTimer />
+      </PomodoroProvider>
     </Main>
   );
 }

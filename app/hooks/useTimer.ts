@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { usePomodoro } from "../context/PomodoroContext";
 
-export default function useTimer(initialTime: number) {
-  const [time, setTime] = useState(initialTime);
-  const [isPaused, setIsPaused] = useState(true);
+export default function useTimer() {
+  const { time, setTime, initialTime, isPaused, setIsPaused } = usePomodoro();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function useTimer(initialTime: number) {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isPaused]);
+  }, [isPaused, setTime]);
 
   function play() {
     setIsPaused(false);
@@ -37,5 +37,5 @@ export default function useTimer(initialTime: number) {
     setTime(initialTime);
   }
 
-  return { time, isPaused, play, pause, reset };
+  return { initialTime, time, setTime, isPaused, play, pause, reset };
 }

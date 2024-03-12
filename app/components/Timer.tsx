@@ -1,8 +1,13 @@
-import React, { createContext, useContext } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+} from "react";
 import styled from "styled-components";
 import { Pause, Play, RefreshCcw } from "lucide-react";
 import useTimer from "../hooks/useTimer";
-import { WORK_TIME } from "../utils/constants";
 
 const TimerWrapper = styled.div`
   display: flex;
@@ -50,7 +55,9 @@ const StyledCountdown = styled.p`
 `;
 
 type TimerContextValue = {
+  initialTime: number;
   time: number;
+  setTime: Dispatch<SetStateAction<number>>;
   isPaused: boolean;
   play: () => void;
   pause: () => void;
@@ -71,10 +78,13 @@ type ChildrenProp = {
 };
 
 function Timer({ children }: ChildrenProp) {
-  const { time, isPaused, play, pause, reset } = useTimer(WORK_TIME);
+  const { initialTime, time, setTime, isPaused, play, pause, reset } =
+    useTimer();
 
   return (
-    <TimerContext.Provider value={{ time, isPaused, play, pause, reset }}>
+    <TimerContext.Provider
+      value={{ initialTime, time, setTime, isPaused, play, pause, reset }}
+    >
       {children}
     </TimerContext.Provider>
   );
@@ -85,8 +95,7 @@ function Display({ children }: ChildrenProp) {
 }
 
 function ProgressBar() {
-  const { time } = useTimerContext();
-  const totalTime = WORK_TIME;
+  const { time, initialTime } = useTimerContext();
 
   return (
     <Svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -95,7 +104,7 @@ function ProgressBar() {
           r="45"
           cx="50"
           cy="50"
-          strokeDasharray={`${(time / totalTime) * 283}, 283`}
+          strokeDasharray={`${(time / initialTime) * 283}, 283`}
         ></Circle>
       </g>
     </Svg>
@@ -103,7 +112,11 @@ function ProgressBar() {
 }
 
 function Countdown({ children }: ChildrenProp) {
-  const { time } = useTimerContext();
+  const { initialTime, time, setTime } = useTimerContext();
+
+  useEffect(() => {
+    setTime(initialTime);
+  }, [initialTime, setTime]);
 
   return (
     <TimerContainer>

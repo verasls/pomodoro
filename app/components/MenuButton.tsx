@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
+import { usePomodoro } from "../context/PomodoroContext";
 
 type ButtonProps = {
   $active: boolean;
@@ -26,10 +27,11 @@ type Phase = "Work" | "Short break" | "Long break";
 const options: Array<Phase> = ["Work", "Short break", "Long break"];
 
 export default function MenuButton() {
-  const [phase, setPhase] = useState<Phase>("Work");
+  const { phaseTimes, phase, setPhase, setInitialTime } = usePomodoro();
 
   function handleClick(value: Phase) {
     setPhase(value);
+    setInitialTime(phaseTimes[value]);
   }
 
   return options.map((option) => (
