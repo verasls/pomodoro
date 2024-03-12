@@ -1,9 +1,50 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { usePomodoro } from "../context/PomodoroContext";
 
 export default function useTimer() {
-  const { time, setTime, initialTime, isPaused, setIsPaused } = usePomodoro();
+  const {
+    phaseTimes,
+    phase,
+    setPhase,
+    numCycles,
+    setNumCycles,
+    time,
+    setTime,
+    initialTime,
+    setInitialTime,
+    isPaused,
+    setIsPaused,
+  } = usePomodoro();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  type Phase = "Work" | "Short break" | "Long break";
+  const phases = useMemo<Array<Phase>>(
+    () => ["Work", "Short break", "Long break"],
+    []
+  );
+
+  const changePhase = useCallback(() => {
+    const currentPhaseIndex = phases.indexOf(phase);
+    let nextPhaseIndex = currentPhaseIndex < 2 ? currentPhaseIndex + 1 : 0;
+
+    if (currentPhaseIndex === 1 && numCycles < 3) {
+      setNumCycles((cycles) => cycles + 1);
+      nextPhaseIndex = 0;
+    }
+    if (currentPhaseIndex === 2) setNumCycles(0);
+
+    const nextPhase = phases.at(nextPhaseIndex)!;
+
+    setPhase(nextPhase);
+    setInitialTime(phaseTimes[nextPhase]);
+  }, [
+    phase,
+    phaseTimes,
+    phases,
+    setInitialTime,
+    setPhase,
+    numCycles,
+    setNumCycles,
+  ]);
 
   useEffect(() => {
     if (!isPaused) {
@@ -11,6 +52,7 @@ export default function useTimer() {
         setTime((time) => {
           if (time === 0) {
             clearInterval(timerRef.current!);
+            changePhase();
             return 0;
           }
           return time - 1;
@@ -21,7 +63,7 @@ export default function useTimer() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isPaused, setTime]);
+  }, [isPaused, setTime, changePhase]);
 
   function play() {
     setIsPaused(false);

@@ -21,6 +21,8 @@ type PomodoroContextValue = {
   };
   phase: Phase;
   setPhase: Dispatch<SetStateAction<Phase>>;
+  numCycles: number;
+  setNumCycles: Dispatch<SetStateAction<number>>;
   initialTime: number;
   setInitialTime: Dispatch<SetStateAction<number>>;
   time: number;
@@ -44,6 +46,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
     "Long break": LONG_BREAK_TIME,
   };
   const [phase, setPhase] = useState<Phase>("Work");
+  const [numCycles, setNumCycles] = useState(0);
   const [initialTime, setInitialTime] = useState(phaseTimes[phase]);
   const [time, setTime] = useState(initialTime);
   const [isPaused, setIsPaused] = useState(true);
@@ -54,6 +57,8 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
         phaseTimes,
         phase,
         setPhase,
+        numCycles,
+        setNumCycles,
         initialTime,
         setInitialTime,
         time,
