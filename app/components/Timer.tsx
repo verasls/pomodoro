@@ -118,9 +118,12 @@ function Countdown({ children }: ChildrenProp) {
     setTime(initialTime);
   }, [initialTime, setTime]);
 
+  const minutes = String(Math.floor(time / 60)).padStart(2, "0");
+  const seconds = String(time % 60).padStart(2, "0");
+
   return (
     <TimerContainer>
-      <StyledCountdown>{time}</StyledCountdown>
+      <StyledCountdown>{`${minutes}:${seconds}`}</StyledCountdown>
       {children}
     </TimerContainer>
   );
