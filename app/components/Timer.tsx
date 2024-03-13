@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Play, RefreshCcw } from "lucide-react";
+import { Pause, Play, RefreshCcw } from "lucide-react";
+import { usePomodoro } from "../context/PomodoroContext";
 
 const TimerWrapper = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ const TimerWrapper = styled.div`
   box-shadow: var(--shadow-large);
 `;
 
-const TimerContainer = styled.div`
+const CountdownContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -53,29 +54,47 @@ type ChildrenProp = {
 };
 
 function Timer({ children }: ChildrenProp) {
-  return <>{children}</>;
-}
-
-function Display({ children }: ChildrenProp) {
   return <TimerWrapper>{children}</TimerWrapper>;
 }
 
 function ProgressBar() {
+  const { state } = usePomodoro();
+
   return (
     <Svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <g>
-        <Circle r="45" cx="50" cy="50" strokeDasharray="283"></Circle>
+        <Circle
+          r="45"
+          cx="50"
+          cy="50"
+          strokeDasharray={`${(state.time / state.initialTime) * 283}, 283`}
+        ></Circle>
       </g>
     </Svg>
   );
 }
 
 function Countdown({ children }: ChildrenProp) {
+  const { state, dispatch } = usePomodoro();
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (!state.isPaused) {
+      timer = setInterval(() => {
+        dispatch({ type: "runTimer" });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [state.isPaused]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const minutes = String(Math.floor(state.time / 60)).padStart(2, "0");
+  const seconds = String(state.time % 60).padStart(2, "0");
+
   return (
-    <TimerContainer>
-      <StyledCountdown>{"xx:xx"}</StyledCountdown>
+    <CountdownContainer>
+      <StyledCountdown>{`${minutes}:${seconds}`}</StyledCountdown>
       {children}
-    </TimerContainer>
+    </CountdownContainer>
   );
 }
 
@@ -88,24 +107,31 @@ type ButtonProps = {
 };
 
 function Button({ type }: ButtonProps) {
+  const { state, dispatch } = usePomodoro();
+
   if (type === "play-pause") {
     return (
-      <StyledButton>
-        <Play size={36} />
+      <StyledButton
+        onClick={
+          state.isPaused
+            ? () => dispatch({ type: "playTimer" })
+            : () => dispatch({ type: "pauseTimer" })
+        }
+      >
+        {state.isPaused ? <Play size={36} /> : <Pause size={36} />}
       </StyledButton>
     );
   }
 
   if (type === "reset") {
     return (
-      <StyledButton>
+      <StyledButton onClick={() => dispatch({ type: "resetTimer" })}>
         <RefreshCcw size={36} />
       </StyledButton>
     );
   }
 }
 
-Timer.Display = Display;
 Timer.ProgressBar = ProgressBar;
 Timer.Countdown = Countdown;
 Timer.Options = Options;

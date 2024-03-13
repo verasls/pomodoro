@@ -13,13 +13,55 @@ const phaseTimes: Record<Phase, number> = {
   "Long break": LONG_BREAK_TIME,
 };
 
-type State = {};
+type State = {
+  phase: Phase;
+  isPaused: boolean;
+  initialTime: number;
+  time: number;
+};
 
-function createInitialState(): State {}
+function createInitialState(): State {
+  const initialPhase: Phase = "Work";
 
-type Action = {};
+  const initialState = {
+    phase: initialPhase,
+    isPaused: true,
+    initialTime: phaseTimes[initialPhase],
+    time: phaseTimes[initialPhase],
+  };
 
-function reducer(state: State, action: Action) {}
+  return initialState;
+}
+
+type Action =
+  | { type: "playTimer" }
+  | { type: "pauseTimer" }
+  | { type: "resetTimer" }
+  | { type: "runTimer" }
+  | { type: "changePhase"; payload: Phase };
+
+function reducer(state: State, action: Action) {
+  switch (action.type) {
+    case "playTimer":
+      return { ...state, isPaused: false };
+    case "pauseTimer":
+      return { ...state, isPaused: true };
+    case "resetTimer":
+      return { ...state, isPaused: true, time: state.initialTime };
+    case "runTimer":
+      const newTime = state.time - 1;
+      if (newTime < 0) return { ...state, isPaused: true };
+      return { ...state, time: newTime };
+    case "changePhase":
+      return {
+        ...state,
+        phase: action.payload,
+        time: phaseTimes[action.payload],
+      };
+    default:
+      throw new Error("Unknown action");
+  }
+}
 
 type PomodoroContextType = {
   state: State;
