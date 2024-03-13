@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
 import StyledComponentsRegistry from "@/lib/registry";
 import GlobalStyles from "./GlobalStyles";
 import "@/app/index.css";
@@ -20,6 +21,7 @@ export default function RootLayout({
           <GlobalStyles />
           {children}
         </StyledComponentsRegistry>
+        <Analytics />
       </body>
     </html>
   );
