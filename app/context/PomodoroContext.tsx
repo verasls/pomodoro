@@ -79,6 +79,7 @@ function reducer(state: State, action: Action) {
       return {
         ...state,
         phase: action.payload,
+        isPaused: true,
         initialTime: phaseTimes[action.payload],
         time: phaseTimes[action.payload],
       };
