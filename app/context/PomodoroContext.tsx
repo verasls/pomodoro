@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import React, { createContext, useContext, useReducer } from "react";
 import {
   LONG_BREAK_TIME,
   SHORT_BREAK_TIME,
@@ -13,25 +7,26 @@ import {
 
 type Phase = "Work" | "Short break" | "Long break";
 
-type PomodoroContextValue = {
-  phaseTimes: {
-    Work: number;
-    "Short break": number;
-    "Long break": number;
-  };
-  phase: Phase;
-  setPhase: Dispatch<SetStateAction<Phase>>;
-  numCycles: number;
-  setNumCycles: Dispatch<SetStateAction<number>>;
-  initialTime: number;
-  setInitialTime: Dispatch<SetStateAction<number>>;
-  time: number;
-  setTime: Dispatch<SetStateAction<number>>;
-  isPaused: boolean;
-  setIsPaused: Dispatch<SetStateAction<boolean>>;
+const phaseTimes: Record<Phase, number> = {
+  Work: WORK_TIME,
+  "Short break": SHORT_BREAK_TIME,
+  "Long break": LONG_BREAK_TIME,
 };
 
-const PomodoroContext = createContext<PomodoroContextValue | undefined>(
+type State = {};
+
+function createInitialState(): State {}
+
+type Action = {};
+
+function reducer(state: State, action: Action) {}
+
+type PomodoroContextType = {
+  state: State;
+  dispatch: React.Dispatch<Action>;
+};
+
+const PomodoroContext = createContext<PomodoroContextType | undefined>(
   undefined
 );
 
@@ -40,33 +35,10 @@ type PomodoroProviderProps = {
 };
 
 function PomodoroProvider({ children }: PomodoroProviderProps) {
-  const phaseTimes = {
-    Work: WORK_TIME,
-    "Short break": SHORT_BREAK_TIME,
-    "Long break": LONG_BREAK_TIME,
-  };
-  const [phase, setPhase] = useState<Phase>("Work");
-  const [numCycles, setNumCycles] = useState(0);
-  const [initialTime, setInitialTime] = useState(phaseTimes[phase]);
-  const [time, setTime] = useState(initialTime);
-  const [isPaused, setIsPaused] = useState(true);
+  const [state, dispatch] = useReducer(reducer, null, createInitialState);
 
   return (
-    <PomodoroContext.Provider
-      value={{
-        phaseTimes,
-        phase,
-        setPhase,
-        numCycles,
-        setNumCycles,
-        initialTime,
-        setInitialTime,
-        time,
-        setTime,
-        isPaused,
-        setIsPaused,
-      }}
-    >
+    <PomodoroContext.Provider value={{ state, dispatch }}>
       {children}
     </PomodoroContext.Provider>
   );
