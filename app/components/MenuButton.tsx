@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import { usePomodoro } from "../context/PomodoroContext";
 
 type ButtonProps = {
   $active: boolean;
@@ -23,12 +24,18 @@ const Button = styled.button<ButtonProps>`
 `;
 
 type Phase = "Work" | "Short break" | "Long break";
-const options: Array<Phase> = ["Work", "Short break", "Long break"];
+const phases: Array<Phase> = ["Work", "Short break", "Long break"];
 
 export default function MenuButton() {
-  return options.map((option) => (
-    <Button key={option} $active={false}>
-      {option}
+  const { state, dispatch } = usePomodoro();
+
+  return phases.map((phase) => (
+    <Button
+      key={phase}
+      $active={phase === state.phase}
+      onClick={() => dispatch({ type: "changePhase", payload: phase })}
+    >
+      {phase}
     </Button>
   ));
 }

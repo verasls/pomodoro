@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Play, RefreshCcw } from "lucide-react";
+import { usePomodoro } from "../context/PomodoroContext";
 
 const TimerWrapper = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ const TimerWrapper = styled.div`
   box-shadow: var(--shadow-large);
 `;
 
-const TimerContainer = styled.div`
+const CountdownContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -53,10 +54,6 @@ type ChildrenProp = {
 };
 
 function Timer({ children }: ChildrenProp) {
-  return <>{children}</>;
-}
-
-function Display({ children }: ChildrenProp) {
   return <TimerWrapper>{children}</TimerWrapper>;
 }
 
@@ -71,11 +68,17 @@ function ProgressBar() {
 }
 
 function Countdown({ children }: ChildrenProp) {
+  const { state } = usePomodoro();
+  const time = state.initialTime;
+
+  const minutes = String(Math.floor(time / 60)).padStart(2, "0");
+  const seconds = String(time % 60).padStart(2, "0");
+
   return (
-    <TimerContainer>
-      <StyledCountdown>{"xx:xx"}</StyledCountdown>
+    <CountdownContainer>
+      <StyledCountdown>{`${minutes}:${seconds}`}</StyledCountdown>
       {children}
-    </TimerContainer>
+    </CountdownContainer>
   );
 }
 
@@ -105,7 +108,6 @@ function Button({ type }: ButtonProps) {
   }
 }
 
-Timer.Display = Display;
 Timer.ProgressBar = ProgressBar;
 Timer.Countdown = Countdown;
 Timer.Options = Options;

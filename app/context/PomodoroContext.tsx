@@ -13,13 +13,35 @@ const phaseTimes: Record<Phase, number> = {
   "Long break": LONG_BREAK_TIME,
 };
 
-type State = {};
+type State = {
+  phase: Phase;
+  initialTime: number;
+};
 
-function createInitialState(): State {}
+function createInitialState(): State {
+  const initialPhase: Phase = "Work";
+  const initialTime = phaseTimes[initialPhase];
 
-type Action = {};
+  const initialState = {
+    phase: initialPhase,
+    initialTime: initialTime,
+  };
 
-function reducer(state: State, action: Action) {}
+  return initialState;
+}
+
+type Action = { type: "changePhase"; payload: Phase };
+
+function reducer(state: State, action: Action) {
+  switch (action.type) {
+    case "changePhase":
+      return {
+        ...state,
+        phase: action.payload,
+        initialTime: phaseTimes[action.payload],
+      };
+  }
+}
 
 type PomodoroContextType = {
   state: State;
