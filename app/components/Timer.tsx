@@ -1,13 +1,6 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-} from "react";
+import React from "react";
 import styled from "styled-components";
-import { Pause, Play, RefreshCcw } from "lucide-react";
-import useTimer from "../hooks/useTimer";
+import { Play, RefreshCcw } from "lucide-react";
 
 const TimerWrapper = styled.div`
   display: flex;
@@ -55,40 +48,12 @@ const StyledCountdown = styled.p`
   font-weight: 700;
 `;
 
-type TimerContextValue = {
-  initialTime: number;
-  time: number;
-  setTime: Dispatch<SetStateAction<number>>;
-  isPaused: boolean;
-  play: () => void;
-  pause: () => void;
-  reset: () => void;
-};
-
-const TimerContext = createContext<TimerContextValue | undefined>(undefined);
-
-function useTimerContext() {
-  const context = useContext(TimerContext);
-  if (context === undefined)
-    throw new Error("TimerContext cannot be used outside the Timer component");
-  return context;
-}
-
 type ChildrenProp = {
   children: React.ReactNode;
 };
 
 function Timer({ children }: ChildrenProp) {
-  const { initialTime, time, setTime, isPaused, play, pause, reset } =
-    useTimer();
-
-  return (
-    <TimerContext.Provider
-      value={{ initialTime, time, setTime, isPaused, play, pause, reset }}
-    >
-      {children}
-    </TimerContext.Provider>
-  );
+  return <>{children}</>;
 }
 
 function Display({ children }: ChildrenProp) {
@@ -96,35 +61,19 @@ function Display({ children }: ChildrenProp) {
 }
 
 function ProgressBar() {
-  const { time, initialTime } = useTimerContext();
-
   return (
     <Svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <g>
-        <Circle
-          r="45"
-          cx="50"
-          cy="50"
-          strokeDasharray={`${(time / initialTime) * 283}, 283`}
-        ></Circle>
+        <Circle r="45" cx="50" cy="50" strokeDasharray="283"></Circle>
       </g>
     </Svg>
   );
 }
 
 function Countdown({ children }: ChildrenProp) {
-  const { initialTime, time, setTime } = useTimerContext();
-
-  useEffect(() => {
-    setTime(initialTime);
-  }, [initialTime, setTime]);
-
-  const minutes = String(Math.floor(time / 60)).padStart(2, "0");
-  const seconds = String(time % 60).padStart(2, "0");
-
   return (
     <TimerContainer>
-      <StyledCountdown>{`${minutes}:${seconds}`}</StyledCountdown>
+      <StyledCountdown>{"xx:xx"}</StyledCountdown>
       {children}
     </TimerContainer>
   );
@@ -139,19 +88,17 @@ type ButtonProps = {
 };
 
 function Button({ type }: ButtonProps) {
-  const { isPaused, play, pause, reset } = useTimerContext();
-
   if (type === "play-pause") {
     return (
-      <StyledButton onClick={isPaused ? () => play() : () => pause()}>
-        {isPaused ? <Play size={36} /> : <Pause size={36} />}
+      <StyledButton>
+        <Play size={36} />
       </StyledButton>
     );
   }
 
   if (type === "reset") {
     return (
-      <StyledButton onClick={() => reset()}>
+      <StyledButton>
         <RefreshCcw size={36} />
       </StyledButton>
     );
