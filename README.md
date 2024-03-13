@@ -1,7 +1,7 @@
 This is a React implementation of a [Pomodoro timer](https://en.wikipedia.org/wiki/Pomodoro_Technique) using Next.js, Typescript and Styled-components.
 
-
 ## Features
+
 - [x] Start, stop and restart the timer
 - [ ] System notification when the timer ends
 - [ ] Light and dark modes
@@ -9,7 +9,7 @@ This is a React implementation of a [Pomodoro timer](https://en.wikipedia.org/wi
 
 ---
 
-You can see this live at xxxx.
+You can see this live at [pomodoro-lv.vercel.app](https://pomodoro-lv.vercel.app/)
 
 To run the app locally:
 
