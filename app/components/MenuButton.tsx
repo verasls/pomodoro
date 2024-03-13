@@ -24,23 +24,18 @@ const Button = styled.button<ButtonProps>`
 `;
 
 type Phase = "Work" | "Short break" | "Long break";
-const options: Array<Phase> = ["Work", "Short break", "Long break"];
+const phases: Array<Phase> = ["Work", "Short break", "Long break"];
 
 export default function MenuButton() {
-  const { phaseTimes, phase, setPhase, setInitialTime } = usePomodoro();
+  const { state, dispatch } = usePomodoro();
 
-  function handleClick(value: Phase) {
-    setPhase(value);
-    setInitialTime(phaseTimes[value]);
-  }
-
-  return options.map((option) => (
+  return phases.map((phase) => (
     <Button
-      key={option}
-      onClick={() => handleClick(option)}
-      $active={option === phase}
+      key={phase}
+      $active={phase === state.phase}
+      onClick={() => dispatch({ type: "changePhase", payload: phase })}
     >
-      {option}
+      {phase}
     </Button>
   ));
 }

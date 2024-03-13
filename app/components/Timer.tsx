@@ -1,13 +1,7 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-} from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Pause, Play, RefreshCcw } from "lucide-react";
-import useTimer from "../hooks/useTimer";
+import { usePomodoro } from "../context/PomodoroContext";
 
 const TimerWrapper = styled.div`
   display: flex;
@@ -23,7 +17,7 @@ const TimerWrapper = styled.div`
   box-shadow: var(--shadow-large);
 `;
 
-const TimerContainer = styled.div`
+const CountdownContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -55,48 +49,16 @@ const StyledCountdown = styled.p`
   font-weight: 700;
 `;
 
-type TimerContextValue = {
-  initialTime: number;
-  time: number;
-  setTime: Dispatch<SetStateAction<number>>;
-  isPaused: boolean;
-  play: () => void;
-  pause: () => void;
-  reset: () => void;
-};
-
-const TimerContext = createContext<TimerContextValue | undefined>(undefined);
-
-function useTimerContext() {
-  const context = useContext(TimerContext);
-  if (context === undefined)
-    throw new Error("TimerContext cannot be used outside the Timer component");
-  return context;
-}
-
 type ChildrenProp = {
   children: React.ReactNode;
 };
 
 function Timer({ children }: ChildrenProp) {
-  const { initialTime, time, setTime, isPaused, play, pause, reset } =
-    useTimer();
-
-  return (
-    <TimerContext.Provider
-      value={{ initialTime, time, setTime, isPaused, play, pause, reset }}
-    >
-      {children}
-    </TimerContext.Provider>
-  );
-}
-
-function Display({ children }: ChildrenProp) {
   return <TimerWrapper>{children}</TimerWrapper>;
 }
 
 function ProgressBar() {
-  const { time, initialTime } = useTimerContext();
+  const { state } = usePomodoro();
 
   return (
     <Svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -105,7 +67,7 @@ function ProgressBar() {
           r="45"
           cx="50"
           cy="50"
-          strokeDasharray={`${(time / initialTime) * 283}, 283`}
+          strokeDasharray={`${(state.time / state.initialTime) * 283}, 283`}
         ></Circle>
       </g>
     </Svg>
@@ -113,20 +75,26 @@ function ProgressBar() {
 }
 
 function Countdown({ children }: ChildrenProp) {
-  const { initialTime, time, setTime } = useTimerContext();
+  const { state, dispatch } = usePomodoro();
 
   useEffect(() => {
-    setTime(initialTime);
-  }, [initialTime, setTime]);
+    let timer: NodeJS.Timeout;
+    if (!state.isPaused) {
+      timer = setInterval(() => {
+        dispatch({ type: "controlTimer" });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [state.isPaused]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const minutes = String(Math.floor(time / 60)).padStart(2, "0");
-  const seconds = String(time % 60).padStart(2, "0");
+  const minutes = String(Math.floor(state.time / 60)).padStart(2, "0");
+  const seconds = String(state.time % 60).padStart(2, "0");
 
   return (
-    <TimerContainer>
+    <CountdownContainer>
       <StyledCountdown>{`${minutes}:${seconds}`}</StyledCountdown>
       {children}
-    </TimerContainer>
+    </CountdownContainer>
   );
 }
 
@@ -139,26 +107,31 @@ type ButtonProps = {
 };
 
 function Button({ type }: ButtonProps) {
-  const { isPaused, play, pause, reset } = useTimerContext();
+  const { state, dispatch } = usePomodoro();
 
   if (type === "play-pause") {
     return (
-      <StyledButton onClick={isPaused ? () => play() : () => pause()}>
-        {isPaused ? <Play size={36} /> : <Pause size={36} />}
+      <StyledButton
+        onClick={
+          state.isPaused
+            ? () => dispatch({ type: "playTimer" })
+            : () => dispatch({ type: "pauseTimer" })
+        }
+      >
+        {state.isPaused ? <Play size={36} /> : <Pause size={36} />}
       </StyledButton>
     );
   }
 
   if (type === "reset") {
     return (
-      <StyledButton onClick={() => reset()}>
+      <StyledButton onClick={() => dispatch({ type: "resetTimer" })}>
         <RefreshCcw size={36} />
       </StyledButton>
     );
   }
 }
 
-Timer.Display = Display;
 Timer.ProgressBar = ProgressBar;
 Timer.Countdown = Countdown;
 Timer.Options = Options;
