@@ -6,6 +6,7 @@ import {
 } from "../utils/constants";
 
 type Phase = "Work" | "Short break" | "Long break";
+const phases: Array<Phase> = ["Work", "Short break", "Long break"];
 
 const phaseTimes: Record<Phase, number> = {
   Work: WORK_TIME,
@@ -18,6 +19,7 @@ type State = {
   isPaused: boolean;
   initialTime: number;
   time: number;
+  numCycles: number;
 };
 
 function createInitialState(): State {
@@ -28,6 +30,7 @@ function createInitialState(): State {
     isPaused: true,
     initialTime: phaseTimes[initialPhase],
     time: phaseTimes[initialPhase],
+    numCycles: 0,
   };
 
   return initialState;
@@ -37,27 +40,48 @@ type Action =
   | { type: "playTimer" }
   | { type: "pauseTimer" }
   | { type: "resetTimer" }
-  | { type: "runTimer" }
+  | { type: "controlTimer" }
   | { type: "changePhase"; payload: Phase };
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
     case "playTimer":
       return { ...state, isPaused: false };
+
     case "pauseTimer":
       return { ...state, isPaused: true };
+
     case "resetTimer":
       return { ...state, isPaused: true, time: state.initialTime };
-    case "runTimer":
+
+    case "controlTimer":
+      const currentPhaseIndex = phases.indexOf(state.phase);
+      let nextPhaseIndex = currentPhaseIndex < 2 ? currentPhaseIndex + 1 : 0;
+      if (currentPhaseIndex === 1 && state.numCycles < 3) nextPhaseIndex = 0;
+      const nextPhase = phases.at(nextPhaseIndex)!;
       const newTime = state.time - 1;
-      if (newTime < 0) return { ...state, isPaused: true };
+
+      if (newTime < 0)
+        return {
+          ...state,
+          phase: nextPhase,
+          isPaused: false,
+          initialTime: phaseTimes[nextPhase],
+          time: phaseTimes[nextPhase],
+          numCycles:
+            currentPhaseIndex === 1
+              ? (state.numCycles + 1) % 4
+              : state.numCycles,
+        };
       return { ...state, time: newTime };
+
     case "changePhase":
       return {
         ...state,
         phase: action.payload,
         time: phaseTimes[action.payload],
       };
+
     default:
       throw new Error("Unknown action");
   }

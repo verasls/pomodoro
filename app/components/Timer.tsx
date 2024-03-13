@@ -81,7 +81,7 @@ function Countdown({ children }: ChildrenProp) {
     let timer: NodeJS.Timeout;
     if (!state.isPaused) {
       timer = setInterval(() => {
-        dispatch({ type: "runTimer" });
+        dispatch({ type: "controlTimer" });
       }, 1000);
     }
     return () => clearInterval(timer);
