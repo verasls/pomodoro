@@ -3,7 +3,7 @@ This is a React implementation of a [Pomodoro timer](https://en.wikipedia.org/wi
 ## Features
 
 - [x] Start, stop and restart the timer
-- [ ] System notification when the timer ends
+- [x] Notification when the timer ends
 - [ ] Light and dark modes
 - [ ] Customizable timer durations
 
