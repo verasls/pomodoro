@@ -59,6 +59,7 @@ function Timer({ children }: ChildrenProp) {
 
 function ProgressBar() {
   const { state } = usePomodoro();
+  const timeFraction = state.time / state.initialTime;
 
   return (
     <Svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -67,7 +68,9 @@ function ProgressBar() {
           r="45"
           cx="50"
           cy="50"
-          strokeDasharray={`${(state.time / state.initialTime) * 283}, 283`}
+          strokeDasharray={`${
+            (timeFraction - (1 / state.initialTime) * (1 - timeFraction)) * 283
+          }, 283`}
         ></Circle>
       </g>
     </Svg>

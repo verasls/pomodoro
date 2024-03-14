@@ -23,6 +23,7 @@ type State = {
   time: number;
   numCycles: number;
   notificationPermission: NotificationPermission | null;
+  sendNotification: boolean;
 };
 
 type Action =
@@ -31,7 +32,8 @@ type Action =
   | { type: "resetTimer" }
   | { type: "controlTimer" }
   | { type: "changePhase"; payload: Phase }
-  | { type: "setNotificationPermission"; payload: NotificationPermission };
+  | { type: "setNotificationPermission"; payload: NotificationPermission }
+  | { type: "turnNotificationOff" };
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
@@ -51,7 +53,7 @@ function reducer(state: State, action: Action) {
       const nextPhase = phases.at(nextPhaseIndex)!;
       const newTime = state.time - 1;
 
-      if (newTime < 0)
+      if (newTime <= 0)
         return {
           ...state,
           phase: nextPhase,
@@ -62,6 +64,7 @@ function reducer(state: State, action: Action) {
             currentPhaseIndex === 1
               ? (state.numCycles + 1) % 4
               : state.numCycles,
+          sendNotification: true,
         };
       return { ...state, time: newTime };
 
@@ -76,6 +79,9 @@ function reducer(state: State, action: Action) {
 
     case "setNotificationPermission":
       return { ...state, notificationPermission: action.payload };
+
+    case "turnNotificationOff":
+      return { ...state, sendNotification: false };
 
     default:
       throw new Error("Unknown action");
@@ -109,6 +115,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
     time: phaseTimes["Work"],
     numCycles: 0,
     notificationPermission: storedPermission,
+    sendNotification: false,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);

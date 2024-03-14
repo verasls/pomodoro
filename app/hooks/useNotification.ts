@@ -35,10 +35,10 @@ export default function useNotification({
 
     if (
       state.notificationPermission === "granted" &&
-      !state.isPaused &&
-      state.time === 0
+      state.sendNotification === true
     ) {
       new Notification(notificationText[state.phase]);
+      dispatch({ type: "turnNotificationOff" });
     }
-  }, [state]);
+  }, [state, dispatch]);
 }
