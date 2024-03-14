@@ -4,6 +4,8 @@ import {
   SHORT_BREAK_TIME,
   WORK_TIME,
 } from "../utils/constants";
+import useLocalStorage from "../hooks/useLocalStorage";
+import useNotification from "../hooks/useNotification";
 
 type Phase = "Work" | "Short break" | "Long break";
 const phases: Array<Phase> = ["Work", "Short break", "Long break"];
@@ -20,28 +22,16 @@ type State = {
   initialTime: number;
   time: number;
   numCycles: number;
+  notificationPermission: NotificationPermission | null;
 };
-
-function createInitialState(): State {
-  const initialPhase: Phase = "Work";
-
-  const initialState = {
-    phase: initialPhase,
-    isPaused: true,
-    initialTime: phaseTimes[initialPhase],
-    time: phaseTimes[initialPhase],
-    numCycles: 0,
-  };
-
-  return initialState;
-}
 
 type Action =
   | { type: "playTimer" }
   | { type: "pauseTimer" }
   | { type: "resetTimer" }
   | { type: "controlTimer" }
-  | { type: "changePhase"; payload: Phase };
+  | { type: "changePhase"; payload: Phase }
+  | { type: "setNotificationPermission"; payload: NotificationPermission };
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
@@ -84,6 +74,9 @@ function reducer(state: State, action: Action) {
         time: phaseTimes[action.payload],
       };
 
+    case "setNotificationPermission":
+      return { ...state, notificationPermission: action.payload };
+
     default:
       throw new Error("Unknown action");
   }
@@ -103,7 +96,23 @@ type PomodoroProviderProps = {
 };
 
 function PomodoroProvider({ children }: PomodoroProviderProps) {
-  const [state, dispatch] = useReducer(reducer, null, createInitialState);
+  const [storedPermission, setStoredPermission] =
+    useLocalStorage<NotificationPermission | null>(
+      "notificationPermission",
+      null
+    );
+
+  const initialState: State = {
+    phase: "Work",
+    isPaused: true,
+    initialTime: phaseTimes["Work"],
+    time: phaseTimes["Work"],
+    numCycles: 0,
+    notificationPermission: storedPermission,
+  };
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+  useNotification({ storedPermission, setStoredPermission, state, dispatch });
 
   return (
     <PomodoroContext.Provider value={{ state, dispatch }}>
@@ -122,3 +131,4 @@ function usePomodoro() {
 }
 
 export { PomodoroProvider, usePomodoro };
+export type { State, Action, Phase };
