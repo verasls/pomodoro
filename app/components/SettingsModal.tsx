@@ -1,24 +1,15 @@
 import styled from "styled-components";
-import { X } from "lucide-react";
-import Heading from "./Heading";
+import SettingsHeader from "./SettingsHeader";
+import SettingsTime from "./SettingsTime";
 
 const StyledSettingsModal = styled.div`
   background-color: var(--white);
-  width: 90%;
-  max-width: 28rem;
-`;
+  width: 28rem;
 
-const SettingsHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const Button = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  & div {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 type SettingsModalProps = {
@@ -28,12 +19,8 @@ type SettingsModalProps = {
 export default function SettingsModal({ onCloseModal }: SettingsModalProps) {
   return (
     <StyledSettingsModal>
-      <SettingsHeader>
-        <Heading as="h2">Settings</Heading>
-        <Button onClick={() => onCloseModal?.()}>
-          <X size={20} />
-        </Button>
-      </SettingsHeader>
+      <SettingsHeader onCloseModal={onCloseModal} />
+      <SettingsTime />
     </StyledSettingsModal>
   );
 }

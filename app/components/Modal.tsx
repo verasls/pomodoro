@@ -82,11 +82,12 @@ function Window({ children }: WindowProps) {
   if (!isOpen) return null;
 
   return createPortal(
-    <Overlay>
+    <>
+      <Overlay />
       <StyledModal>
         <>{cloneElement(children, { onCloseModal: close })}</>
       </StyledModal>
-    </Overlay>,
+    </>,
     document.body
   );
 }

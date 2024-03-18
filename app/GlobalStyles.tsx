@@ -11,6 +11,7 @@ const styles = css`
       --primary-color: #f1f3f5;
       --accent-color: #fa5252;
       --white: #f8f9fa;
+      --gray: #495057;
       --backdrop-color: rgba(248, 249, 250, 0.1);
       --shadow-small: 5px 10px 30px 0px rgba(0, 0, 0, 0.15);
       --shadow-large: 10px 20px 30px 0px rgba(0, 0, 0, 0.15);
