@@ -38,6 +38,7 @@ const StyledSettingsTime = styled.div`
     height: 36px;
     width: -webkit-fill-available;
     padding: 20px;
+    padding-right: 5px;
     border-radius: 5px;
     font-weight: 600;
     border: 1px solid var(--gray);

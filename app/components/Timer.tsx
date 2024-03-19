@@ -47,6 +47,7 @@ const Circle = styled.circle`
 const StyledCountdown = styled.p`
   font-size: 4.8rem;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
 `;
 
 type ChildrenProp = {
