@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Phase } from "../context/PomodoroContext";
+import { Phase, usePomodoro } from "../context/PomodoroContext";
 import Heading from "./Heading";
 import {
   LONG_BREAK_TIME,
@@ -51,14 +51,21 @@ const phaseTimes: Record<Phase, number> = {
 };
 
 export default function SettingsTime() {
-  const [times, setTimes] = useLocalStorage<Record<Phase, number>>(
-    "time",
+  const { dispatch } = usePomodoro();
+  const [storedTimes, setStoredTimes] = useLocalStorage<Record<Phase, number>>(
+    "pomodoroTimes",
     phaseTimes
   );
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { id, value } = event.target;
-    setTimes({ ...times, [id]: parseInt(value) });
+    const timeInSeconds = !value ? 0 : parseInt(value) * 60;
+
+    setStoredTimes({ ...storedTimes, [id]: timeInSeconds });
+    dispatch({
+      type: "updateTimes",
+      payload: { ...storedTimes, [id]: timeInSeconds },
+    });
   }
 
   return (
@@ -73,7 +80,7 @@ export default function SettingsTime() {
             id={phase}
             min={1}
             max={60}
-            value={times[phase as Phase]}
+            value={storedTimes[phase as Phase] / 60}
             onChange={handleInputChange}
           />
         </div>

@@ -6,6 +6,7 @@ import {
 } from "../utils/constants";
 import useLocalStorage from "../hooks/useLocalStorage";
 import useNotification from "../hooks/useNotification";
+import useSettings from "../hooks/useSettings";
 
 type Phase = "Work" | "Short break" | "Long break";
 const phases: Array<Phase> = ["Work", "Short break", "Long break"];
@@ -19,6 +20,7 @@ const phaseTimes: Record<Phase, number> = {
 type State = {
   phase: Phase;
   isPaused: boolean;
+  phaseTimes: Record<Phase, number>;
   initialTime: number;
   time: number;
   numCycles: number;
@@ -32,6 +34,7 @@ type Action =
   | { type: "resetTimer" }
   | { type: "controlTimer" }
   | { type: "changePhase"; payload: Phase }
+  | { type: "updateTimes"; payload: Record<Phase, number> }
   | { type: "setNotificationPermission"; payload: NotificationPermission }
   | { type: "turnNotificationOff" };
 
@@ -58,8 +61,8 @@ function reducer(state: State, action: Action) {
           ...state,
           phase: nextPhase,
           isPaused: false,
-          initialTime: phaseTimes[nextPhase],
-          time: phaseTimes[nextPhase],
+          initialTime: state.phaseTimes[nextPhase],
+          time: state.phaseTimes[nextPhase],
           numCycles:
             currentPhaseIndex === 1
               ? (state.numCycles + 1) % 4
@@ -73,8 +76,17 @@ function reducer(state: State, action: Action) {
         ...state,
         phase: action.payload,
         isPaused: true,
-        initialTime: phaseTimes[action.payload],
-        time: phaseTimes[action.payload],
+        initialTime: state.phaseTimes[action.payload],
+        time: state.phaseTimes[action.payload],
+      };
+
+    case "updateTimes":
+      return {
+        ...state,
+        isPaused: true,
+        phaseTimes: action.payload,
+        initialTime: action.payload[state.phase],
+        time: action.payload[state.phase],
       };
 
     case "setNotificationPermission":
@@ -107,12 +119,25 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
       "notificationPermission",
       null
     );
+  const [storedTimes] = useLocalStorage<Record<Phase, number>>(
+    "pomodoroTimes",
+    phaseTimes
+  );
+
+  const initialPhase: Phase = "Work";
+
+  const initialPhaseTimes: Record<Phase, number> = {
+    Work: 0,
+    "Short break": 0,
+    "Long break": 0,
+  };
 
   const initialState: State = {
-    phase: "Work",
+    phase: initialPhase,
     isPaused: true,
-    initialTime: phaseTimes["Work"],
-    time: phaseTimes["Work"],
+    phaseTimes: initialPhaseTimes,
+    initialTime: initialPhaseTimes[initialPhase],
+    time: initialPhaseTimes[initialPhase],
     numCycles: 0,
     notificationPermission: storedPermission,
     sendNotification: false,
@@ -120,6 +145,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
 
   const [state, dispatch] = useReducer(reducer, initialState);
   useNotification({ storedPermission, setStoredPermission, state, dispatch });
+  useSettings({ storedTimes, dispatch });
 
   return (
     <PomodoroContext.Provider value={{ state, dispatch }}>
