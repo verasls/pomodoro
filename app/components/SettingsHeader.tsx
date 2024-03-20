@@ -5,6 +5,10 @@ import Heading from "./Heading";
 const StyledHeader = styled.div`
   justify-content: space-between;
   width: 100%;
+
+  & h2 {
+    margin: 0.4rem 0;
+  }
 `;
 
 const Button = styled.button`

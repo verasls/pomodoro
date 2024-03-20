@@ -25,6 +25,7 @@ type State = {
   time: number;
   numCycles: number;
   notificationPermission: NotificationPermission | null;
+  allowNotifications: boolean | null;
   sendNotification: boolean;
 };
 
@@ -36,6 +37,7 @@ type Action =
   | { type: "changePhase"; payload: Phase }
   | { type: "updateTimes"; payload: Record<Phase, number> }
   | { type: "setNotificationPermission"; payload: NotificationPermission }
+  | { type: "allowNotifications"; payload: boolean | null }
   | { type: "turnNotificationOff" };
 
 function reducer(state: State, action: Action) {
@@ -92,6 +94,9 @@ function reducer(state: State, action: Action) {
     case "setNotificationPermission":
       return { ...state, notificationPermission: action.payload };
 
+    case "allowNotifications":
+      return { ...state, allowNotifications: action.payload };
+
     case "turnNotificationOff":
       return { ...state, sendNotification: false };
 
@@ -119,6 +124,12 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
       "notificationPermission",
       null
     );
+
+  const [_, setStoredNotificationSettings] = useLocalStorage<boolean | null>(
+    "allowNotifications",
+    null
+  );
+
   const [storedTimes] = useLocalStorage<Record<Phase, number>>(
     "pomodoroTimes",
     phaseTimes
@@ -140,11 +151,18 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
     time: initialPhaseTimes[initialPhase],
     numCycles: 0,
     notificationPermission: storedPermission,
+    allowNotifications: null,
     sendNotification: false,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
-  useNotification({ storedPermission, setStoredPermission, state, dispatch });
+  useNotification({
+    storedPermission,
+    setStoredPermission,
+    setStoredNotificationSettings,
+    state,
+    dispatch,
+  });
   useSettings({ storedTimes, dispatch });
 
   return (
