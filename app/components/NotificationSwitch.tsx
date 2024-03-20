@@ -1,4 +1,5 @@
-import styled, { css } from "styled-components";
+import React from "react";
+import styled from "styled-components";
 import * as Switch from "@radix-ui/react-switch";
 
 const SwitchRoot = styled(Switch.Root)`
@@ -9,17 +10,20 @@ const SwitchRoot = styled(Switch.Root)`
   border-radius: 9999px;
   position: relative;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
 
-  &[data-state="checked"] {
-    background-color: var(--accent-color);
+  &[data-permitted="false"] {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
-  ${(props) =>
-    props.disabled &&
-    css`
-      pointer-events: none;
-      opacity: 0.5;
-    `}
+  &[data-switch-state="checked"][data-permitted="true"] {
+    background-color: var(--accent-color);
+
+    > span {
+      transform: translateX(17px);
+    }
+  }
 `;
 
 const SwitchThumb = styled(Switch.Thumb)`
@@ -31,26 +35,40 @@ const SwitchThumb = styled(Switch.Thumb)`
   transition: transform 100ms;
   transform: translateX(4px);
   will-change: transform;
-
-  &[data-state="checked"] {
-    transform: translateX(17px);
-  }
 `;
 
 type NotificationsSwitchProps = {
   isChecked: "checked" | "unchecked";
   onClick: () => void;
-  disabled: boolean;
+  permitted: boolean;
+  [key: string]: any;
 };
 
-export default function NotificationsSwitch({
-  isChecked,
-  onClick,
-  disabled,
-}: NotificationsSwitchProps) {
-  return (
-    <SwitchRoot data-state={isChecked} onClick={onClick} disabled={disabled}>
-      <SwitchThumb />
-    </SwitchRoot>
-  );
-}
+const NotificationSwitch = React.forwardRef<
+  HTMLButtonElement,
+  NotificationsSwitchProps
+>(
+  (
+    { isChecked, onClick, permitted, ...remainingProps },
+    forwardedRef: React.Ref<HTMLButtonElement>
+  ) => {
+    const ariaChecked = permitted ? isChecked === "checked" : false;
+
+    return (
+      <SwitchRoot
+        data-switch-state={isChecked}
+        aria-checked={ariaChecked}
+        onClick={onClick}
+        data-permitted={String(permitted)}
+        ref={forwardedRef}
+        {...remainingProps}
+      >
+        <SwitchThumb />
+      </SwitchRoot>
+    );
+  }
+);
+
+NotificationSwitch.displayName = "NotificationSwitch";
+
+export default NotificationSwitch;

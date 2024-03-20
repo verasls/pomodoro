@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import Heading from "./Heading";
 import { usePomodoro } from "../context/PomodoroContext";
 import useLocalStorage from "../hooks/useLocalStorage";
+import Heading from "./Heading";
 import NotificationsSwitch from "./NotificationSwitch";
+import NotificationTooltip from "./NotificationTooltip";
 
 const StyledSettingsNotifications = styled.div`
   justify-content: space-between;
@@ -18,28 +19,44 @@ export default function SettingsNotification() {
   const [storedNotificationSettings, setStoredNotificationSettings] =
     useLocalStorage<boolean | null>("allowNotifications", null);
 
-  const disabled = storedPermission !== "granted" ? true : false;
+  const permitted = storedPermission === "granted" ? true : false;
 
-  function handleClick() {
-    const allowNotifications =
-      storedNotificationSettings !== null ? !storedNotificationSettings : null;
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    const isPermitted = event.currentTarget.getAttribute("data-permitted");
 
-    setStoredNotificationSettings(allowNotifications);
-    dispatch({
-      type: "allowNotifications",
-      payload: allowNotifications,
-    });
+    if (isPermitted === "true") {
+      const allowNotifications =
+        storedNotificationSettings !== null
+          ? !storedNotificationSettings
+          : null;
+
+      setStoredNotificationSettings(allowNotifications);
+      dispatch({
+        type: "allowNotifications",
+        payload: allowNotifications,
+      });
+    }
   }
 
   return (
     <StyledSettingsNotifications>
       <Heading as="h3">Notifications</Heading>
 
-      <NotificationsSwitch
-        isChecked={state.allowNotifications ? "checked" : "unchecked"}
-        onClick={handleClick}
-        disabled={disabled}
-      />
+      {permitted ? (
+        <NotificationsSwitch
+          isChecked={state.allowNotifications ? "checked" : "unchecked"}
+          onClick={handleClick}
+          permitted={permitted}
+        />
+      ) : (
+        <NotificationTooltip>
+          <NotificationsSwitch
+            isChecked={state.allowNotifications ? "checked" : "unchecked"}
+            onClick={handleClick}
+            permitted={permitted}
+          />
+        </NotificationTooltip>
+      )}
     </StyledSettingsNotifications>
   );
 }
