@@ -2,6 +2,7 @@ import styled from "styled-components";
 import SettingsHeader from "./SettingsHeader";
 import SettingsTime from "./SettingsTime";
 import SettingsNotification from "./SettingsNotifications";
+import SettingsTheme from "./SettingsTheme";
 
 const StyledSettingsModal = styled.div`
   background-color: var(--white);
@@ -25,6 +26,7 @@ export default function SettingsModal({ onCloseModal }: SettingsModalProps) {
     <StyledSettingsModal>
       <SettingsHeader onCloseModal={onCloseModal} />
       <SettingsTime />
+      <SettingsTheme />
       <SettingsNotification />
     </StyledSettingsModal>
   );

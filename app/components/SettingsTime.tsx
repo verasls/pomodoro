@@ -11,7 +11,7 @@ import React from "react";
 
 const StyledSettingsTime = styled.div`
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
 
   & h3 {
     width: 100%;
