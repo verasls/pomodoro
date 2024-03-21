@@ -6,6 +6,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const Overlay = styled.div`
   position: fixed;
@@ -78,13 +79,14 @@ type WindowProps = {
 
 function Window({ children }: WindowProps) {
   const { isOpen, close } = useModalContext();
+  const modalRef = useOutsideClick(close);
 
   if (!isOpen) return null;
 
   return createPortal(
     <>
       <Overlay />
-      <StyledModal>
+      <StyledModal ref={modalRef}>
         <>{cloneElement(children, { onCloseModal: close })}</>
       </StyledModal>
     </>,
