@@ -2,11 +2,14 @@ import React, {
   cloneElement,
   createContext,
   useContext,
+  useEffect,
+  useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import useOutsideClick from "../hooks/useOutsideClick";
+import useKeyPress from "../hooks/useKeyPress";
 
 const Overlay = styled.div`
   position: fixed;
@@ -80,14 +83,22 @@ type WindowProps = {
 function Window({ children }: WindowProps) {
   const { isOpen, close } = useModalContext();
   const modalRef = useOutsideClick(close);
+  const modalContentRef = useRef<HTMLDivElement>(null);
+  useKeyPress("Escape", close);
+
+  useEffect(() => {
+    if (isOpen) modalContentRef.current?.focus();
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   return createPortal(
     <>
       <Overlay />
-      <StyledModal ref={modalRef}>
-        <>{cloneElement(children, { onCloseModal: close })}</>
+      <StyledModal ref={modalRef} tabIndex={-1}>
+        <div ref={modalContentRef} tabIndex={0}>
+          {cloneElement(children, { onCloseModal: close })}
+        </div>
       </StyledModal>
     </>,
     document.body
