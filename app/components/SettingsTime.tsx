@@ -33,7 +33,7 @@ const StyledSettingsTime = styled.div`
   }
 
   & input {
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     color: var(--text-color);
     height: 36px;
     width: -webkit-fill-available;
@@ -41,7 +41,7 @@ const StyledSettingsTime = styled.div`
     padding-right: 5px;
     border-radius: 5px;
     font-weight: 600;
-    border: 1px solid var(--gray);
+    border: none;
   }
 `;
 

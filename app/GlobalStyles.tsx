@@ -9,6 +9,7 @@ const styles = css`
       --bg-color: #fff;
       --text-color: #343a40;
       --primary-color: #f1f3f5;
+      --secondary-color: #e0e7ff;
       --accent-color: #fa5252;
       --white: #f8f9fa;
       --gray: #495057;
