@@ -18,14 +18,22 @@ export default function useNotification({
 }: UseNotificationArgs) {
   useEffect(() => {
     async function requestNotificationPermission() {
-      if (storedPermission !== "granted") {
-        const permission = await Notification.requestPermission();
-        const allowNotifications = permission === "granted" ? true : false;
+      const permission = await Notification.requestPermission();
+      const allowNotifications = permission === "granted" ? true : false;
 
+      if (storedPermission !== "granted") {
         setStoredPermission(permission);
         setStoredNotificationSettings(allowNotifications);
 
         dispatch({ type: "setNotificationPermission", payload: permission });
+        dispatch({
+          type: "allowNotifications",
+          payload: allowNotifications,
+        });
+      }
+
+      if (storedPermission === "granted") {
+        setStoredNotificationSettings(allowNotifications);
         dispatch({
           type: "allowNotifications",
           payload: allowNotifications,
