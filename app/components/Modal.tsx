@@ -82,7 +82,6 @@ type WindowProps = {
 
 function Window({ children }: WindowProps) {
   const { isOpen, close } = useModalContext();
-  const modalRef = useOutsideClick(close);
   const modalContentRef = useRef<HTMLDivElement>(null);
   useKeyPress("Escape", close);
 
@@ -95,7 +94,7 @@ function Window({ children }: WindowProps) {
   return createPortal(
     <>
       <Overlay />
-      <StyledModal ref={modalRef} tabIndex={-1}>
+      <StyledModal tabIndex={-1}>
         <div ref={modalContentRef} tabIndex={0}>
           {cloneElement(children, { onCloseModal: close })}
         </div>
