@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Phase, usePomodoro } from "../context/PomodoroContext";
+import { Phase, usePomodoroContext } from "../context/PomodoroContext";
 import Heading from "./Heading";
 import {
   LONG_BREAK_TIME,
@@ -52,7 +52,7 @@ const phaseTimes: Record<Phase, number> = {
 };
 
 export default function SettingsTime() {
-  const { dispatch } = usePomodoro();
+  const { dispatch } = usePomodoroContext();
   const [storedTimes, setStoredTimes] = useLocalStorage<Record<Phase, number>>(
     "pomodoroTimes",
     phaseTimes

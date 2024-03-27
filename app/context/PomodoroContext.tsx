@@ -172,7 +172,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
   );
 }
 
-function usePomodoro() {
+function usePomodoroContext() {
   const context = useContext(PomodoroContext);
   if (context === undefined)
     throw new Error(
@@ -181,5 +181,5 @@ function usePomodoro() {
   return context;
 }
 
-export { PomodoroProvider, usePomodoro };
+export { PomodoroProvider, usePomodoroContext };
 export type { State, Action, Phase };

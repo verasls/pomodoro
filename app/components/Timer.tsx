@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Pause, Play, RefreshCcw } from "lucide-react";
-import { usePomodoro } from "../context/PomodoroContext";
+import { usePomodoroContext } from "../context/PomodoroContext";
 
 const TimerWrapper = styled.div`
   display: flex;
@@ -59,7 +59,7 @@ function Timer({ children }: ChildrenProp) {
 }
 
 function ProgressBar() {
-  const { state } = usePomodoro();
+  const { state } = usePomodoroContext();
   const timeFraction = state.time / state.initialTime;
 
   return (
@@ -79,7 +79,7 @@ function ProgressBar() {
 }
 
 function Countdown({ children }: ChildrenProp) {
-  const { state, dispatch } = usePomodoro();
+  const { state, dispatch } = usePomodoroContext();
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -111,7 +111,7 @@ type ButtonProps = {
 };
 
 function Button({ type }: ButtonProps) {
-  const { state, dispatch } = usePomodoro();
+  const { state, dispatch } = usePomodoroContext();
 
   if (type === "play-pause") {
     return (

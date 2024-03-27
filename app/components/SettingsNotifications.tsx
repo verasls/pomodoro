@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { usePomodoro } from "../context/PomodoroContext";
+import { usePomodoroContext } from "../context/PomodoroContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 import Heading from "./Heading";
 import NotificationsSwitch from "./NotificationSwitch";
@@ -10,7 +10,7 @@ const StyledSettingsNotifications = styled.div`
 `;
 
 export default function SettingsNotification() {
-  const { state, dispatch } = usePomodoro();
+  const { state, dispatch } = usePomodoroContext();
 
   const [storedPermission] = useLocalStorage<NotificationPermission | null>(
     "notificationPermission",
