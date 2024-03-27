@@ -3,6 +3,7 @@ import SettingsHeader from "./SettingsHeader";
 import SettingsTime from "./SettingsTime";
 import SettingsNotification from "./SettingsNotifications";
 import SettingsTheme from "./SettingsTheme";
+import SettingsApplyButton from "./SettingsApplyButton";
 
 const StyledSettingsModal = styled.div`
   background-color: var(--white);
@@ -28,6 +29,7 @@ export default function SettingsModal({ onCloseModal }: SettingsModalProps) {
       <SettingsTime />
       <SettingsTheme />
       <SettingsNotification />
+      <SettingsApplyButton />
     </StyledSettingsModal>
   );
 }
