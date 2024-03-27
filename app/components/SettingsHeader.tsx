@@ -12,10 +12,16 @@ const StyledHeader = styled.div`
 `;
 
 const Button = styled.button`
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  padding: 3px;
+  border-radius: 50%;
+
+  &:hover {
+    background-color: var(--secondary-color);
+  }
 `;
 
 type SettingsHeaderProps = {
