@@ -43,6 +43,19 @@ const StyledSettingsTime = styled.div`
     font-weight: 600;
     border: none;
   }
+
+  @media (max-width: 630px) {
+    flex-direction: column;
+    width: 100%;
+
+    & div {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 4px 0;
+    }
+  }
 `;
 
 const phaseTimes: Record<Phase, number> = {

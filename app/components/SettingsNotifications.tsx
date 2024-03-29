@@ -7,6 +7,10 @@ import NotificationTooltip from "./NotificationTooltip";
 
 const StyledSettingsNotifications = styled.div`
   justify-content: space-between;
+
+  @media (max-width: 630px) {
+    flex-direction: column;
+  }
 `;
 
 export default function SettingsNotification() {

@@ -12,6 +12,10 @@ import Heading from "./Heading";
 
 const StyledSettingsTheme = styled.div`
   justify-content: space-between;
+
+  @media (max-width: 630px) {
+    flex-direction: column;
+  }
 `;
 
 const SelectTrigger = styled(Select.Trigger)`

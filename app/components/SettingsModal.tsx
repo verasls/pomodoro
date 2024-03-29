@@ -8,7 +8,7 @@ import SettingsApplyButton from "./SettingsApplyButton";
 
 const StyledSettingsModal = styled.div`
   background-color: var(--white);
-  width: 28rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
