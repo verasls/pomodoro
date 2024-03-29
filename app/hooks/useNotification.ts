@@ -4,6 +4,7 @@ import { Action, Phase, State } from "../context/PomodoroContext";
 type UseNotificationArgs = {
   storedPermission: NotificationPermission | null;
   setStoredPermission: (permission: NotificationPermission) => void;
+  setStoredNotificationSettings: (allow: boolean | null) => void;
   state: State;
   dispatch: React.Dispatch<Action>;
 };
@@ -11,20 +12,42 @@ type UseNotificationArgs = {
 export default function useNotification({
   storedPermission,
   setStoredPermission,
+  setStoredNotificationSettings,
   state,
   dispatch,
 }: UseNotificationArgs) {
   useEffect(() => {
     async function requestNotificationPermission() {
+      const permission = await Notification.requestPermission();
+      const allowNotifications = permission === "granted" ? true : false;
+
       if (storedPermission !== "granted") {
-        const permission = await Notification.requestPermission();
         setStoredPermission(permission);
+        setStoredNotificationSettings(allowNotifications);
+
         dispatch({ type: "setNotificationPermission", payload: permission });
+        dispatch({
+          type: "allowNotifications",
+          payload: allowNotifications,
+        });
+      }
+
+      if (storedPermission === "granted") {
+        setStoredNotificationSettings(allowNotifications);
+        dispatch({
+          type: "allowNotifications",
+          payload: allowNotifications,
+        });
       }
     }
 
     requestNotificationPermission();
-  }, [storedPermission, setStoredPermission, dispatch]);
+  }, [
+    storedPermission,
+    setStoredPermission,
+    setStoredNotificationSettings,
+    dispatch,
+  ]);
 
   useEffect(() => {
     const notificationText: Record<Phase, string> = {
@@ -35,7 +58,8 @@ export default function useNotification({
 
     if (
       state.notificationPermission === "granted" &&
-      state.sendNotification === true
+      state.sendNotification &&
+      state.allowNotifications
     ) {
       new Notification(notificationText[state.phase]);
       dispatch({ type: "turnNotificationOff" });

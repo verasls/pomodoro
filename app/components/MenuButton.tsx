@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { Phase, usePomodoro } from "../context/PomodoroContext";
+import { Phase, usePomodoroContext } from "../context/PomodoroContext";
 
 type ButtonProps = {
   $active: boolean;
@@ -26,7 +26,7 @@ const Button = styled.button<ButtonProps>`
 const phases: Array<Phase> = ["Work", "Short break", "Long break"];
 
 export default function MenuButton() {
-  const { state, dispatch } = usePomodoro();
+  const { state, dispatch } = usePomodoroContext();
 
   return phases.map((phase) => (
     <Button

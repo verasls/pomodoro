@@ -14,7 +14,7 @@ const Heading = styled.h1<HeadingProps>`
       : props.as === "h2"
       ? "1.2rem"
       : props.as === "h3"
-      ? "0.8rem"
+      ? "1rem"
       : ""
   };
   font-weight: 500;
