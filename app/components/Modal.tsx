@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
-import useOutsideClick from "../hooks/useOutsideClick";
 import useKeyPress from "../hooks/useKeyPress";
 
 const Overlay = styled.div`
