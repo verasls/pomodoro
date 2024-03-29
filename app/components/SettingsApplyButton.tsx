@@ -1,4 +1,11 @@
 import styled from "styled-components";
+import useLocalStorage from "../hooks/useLocalStorage";
+import {
+  Phase,
+  phaseTimes,
+  usePomodoroContext,
+} from "../context/PomodoroContext";
+import { useSettingsContext } from "../context/SettingsContext";
 
 const ButtonContainer = styled.div`
   justify-content: center;
@@ -19,10 +26,30 @@ const Button = styled.button`
   }
 `;
 
-export default function SettingsApplyButton() {
+type SettingsApplyButtonProps = {
+  onCloseModal?: () => void;
+};
+
+export default function SettingsApplyButton({
+  onCloseModal,
+}: SettingsApplyButtonProps) {
+  const { dispatch } = usePomodoroContext();
+  const { settingsState } = useSettingsContext();
+  const [_, setStoredTimes] = useLocalStorage<Record<Phase, number>>(
+    "pomodoroTimes",
+    phaseTimes
+  );
+
+  function applySettings() {
+    setStoredTimes(settingsState.phaseTimes);
+    dispatch({ type: "updateTimes", payload: settingsState.phaseTimes });
+
+    onCloseModal?.();
+  }
+
   return (
     <ButtonContainer>
-      <Button>Apply</Button>
+      <Button onClick={applySettings}>Apply</Button>
     </ButtonContainer>
   );
 }

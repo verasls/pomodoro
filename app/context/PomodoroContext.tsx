@@ -38,7 +38,8 @@ type Action =
   | { type: "updateTimes"; payload: Record<Phase, number> }
   | { type: "setNotificationPermission"; payload: NotificationPermission }
   | { type: "allowNotifications"; payload: boolean | null }
-  | { type: "turnNotificationOff" };
+  | { type: "turnNotificationOff" }
+  | { type: "applyTimeSettings"; payload: Record<Phase, number> };
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
@@ -99,6 +100,9 @@ function reducer(state: State, action: Action) {
 
     case "turnNotificationOff":
       return { ...state, sendNotification: false };
+
+    case "applyTimeSettings":
+      return { ...state, phaseTimes: action.payload };
 
     default:
       throw new Error("Unknown action");
@@ -181,5 +185,5 @@ function usePomodoroContext() {
   return context;
 }
 
-export { PomodoroProvider, usePomodoroContext };
+export { PomodoroProvider, usePomodoroContext, phaseTimes };
 export type { State, Action, Phase };

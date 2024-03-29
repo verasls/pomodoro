@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { SettingsProvider } from "../context/SettingsContext";
 import SettingsHeader from "./SettingsHeader";
 import SettingsTime from "./SettingsTime";
 import SettingsNotification from "./SettingsNotifications";
@@ -25,11 +26,13 @@ type SettingsModalProps = {
 export default function SettingsModal({ onCloseModal }: SettingsModalProps) {
   return (
     <StyledSettingsModal>
-      <SettingsHeader onCloseModal={onCloseModal} />
-      <SettingsTime />
-      <SettingsTheme />
-      <SettingsNotification />
-      <SettingsApplyButton />
+      <SettingsProvider>
+        <SettingsHeader onCloseModal={onCloseModal} />
+        <SettingsTime />
+        <SettingsTheme />
+        <SettingsNotification />
+        <SettingsApplyButton onCloseModal={onCloseModal} />
+      </SettingsProvider>
     </StyledSettingsModal>
   );
 }

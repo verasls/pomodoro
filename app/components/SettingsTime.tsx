@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import { Phase, usePomodoroContext } from "../context/PomodoroContext";
+import { Phase } from "../context/PomodoroContext";
 import Heading from "./Heading";
 import {
   LONG_BREAK_TIME,
   SHORT_BREAK_TIME,
   WORK_TIME,
 } from "../utils/constants";
-import useLocalStorage from "../hooks/useLocalStorage";
 import React from "react";
+import { useSettingsContext } from "../context/SettingsContext";
 
 const StyledSettingsTime = styled.div`
   flex-wrap: wrap;
@@ -52,21 +52,14 @@ const phaseTimes: Record<Phase, number> = {
 };
 
 export default function SettingsTime() {
-  const { dispatch } = usePomodoroContext();
-  const [storedTimes, setStoredTimes] = useLocalStorage<Record<Phase, number>>(
-    "pomodoroTimes",
-    phaseTimes
-  );
+  const { settingsState, settingsDispatch } = useSettingsContext();
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { id, value } = event.target;
     const timeInSeconds = !value ? 0 : parseInt(value) * 60;
+    const updatedTimes = { ...settingsState.phaseTimes, [id]: timeInSeconds };
 
-    setStoredTimes({ ...storedTimes, [id]: timeInSeconds });
-    dispatch({
-      type: "updateTimes",
-      payload: { ...storedTimes, [id]: timeInSeconds },
-    });
+    settingsDispatch({ type: "updateTimes", payload: updatedTimes });
   }
 
   return (
@@ -81,7 +74,7 @@ export default function SettingsTime() {
             id={phase}
             min={1}
             max={60}
-            value={storedTimes[phase as Phase] / 60}
+            value={settingsState.phaseTimes[phase as Phase] / 60}
             onChange={handleInputChange}
           />
         </div>
