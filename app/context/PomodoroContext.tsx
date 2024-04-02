@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 import {
   LONG_BREAK_TIME,
   SHORT_BREAK_TIME,
@@ -38,8 +38,7 @@ type Action =
   | { type: "updateTimes"; payload: Record<Phase, number> }
   | { type: "setNotificationPermission"; payload: NotificationPermission }
   | { type: "allowNotifications"; payload: boolean | null }
-  | { type: "turnNotificationOff" }
-  | { type: "applyTimeSettings"; payload: Record<Phase, number> };
+  | { type: "turnNotificationOff" };
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
@@ -100,9 +99,6 @@ function reducer(state: State, action: Action) {
 
     case "turnNotificationOff":
       return { ...state, sendNotification: false };
-
-    case "applyTimeSettings":
-      return { ...state, phaseTimes: action.payload };
 
     default:
       throw new Error("Unknown action");
