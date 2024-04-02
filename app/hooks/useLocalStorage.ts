@@ -13,9 +13,18 @@ export default function useLocalStorage<T>(
     return initialValue;
   });
 
+  function setValue(value: T | ((val: T) => T)) {
+    const valueToStore = value instanceof Function ? value(storedValue) : value;
+    setStoredValue(value);
+
+    if (typeof window !== undefined) {
+      localStorage.setItem(key, JSON.stringify(valueToStore));
+    }
+  }
+
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(storedValue));
   }, [key, storedValue]);
 
-  return [storedValue, setStoredValue];
+  return [storedValue, setValue];
 }
