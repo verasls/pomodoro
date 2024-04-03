@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { usePomodoroContext } from "../context/PomodoroContext";
+import { useSettingsContext } from "../context/SettingsContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 import Heading from "./Heading";
 import NotificationsSwitch from "./NotificationSwitch";
@@ -14,14 +14,12 @@ const StyledSettingsNotifications = styled.div`
 `;
 
 export default function SettingsNotification() {
-  const { state, dispatch } = usePomodoroContext();
+  const { settingsState, settingsDispatch } = useSettingsContext();
 
   const [storedPermission] = useLocalStorage<NotificationPermission | null>(
     "notificationPermission",
     null
   );
-  const [storedNotificationSettings, setStoredNotificationSettings] =
-    useLocalStorage<boolean | null>("allowNotifications", null);
 
   const permitted = storedPermission === "granted" ? true : false;
 
@@ -30,13 +28,12 @@ export default function SettingsNotification() {
 
     if (isPermitted === "true") {
       const allowNotifications =
-        storedNotificationSettings !== null
-          ? !storedNotificationSettings
+        settingsState.allowNotifications !== null
+          ? !settingsState.allowNotifications
           : null;
 
-      setStoredNotificationSettings(allowNotifications);
-      dispatch({
-        type: "allowNotifications",
+      settingsDispatch({
+        type: "updateNotification",
         payload: allowNotifications,
       });
     }
@@ -48,14 +45,16 @@ export default function SettingsNotification() {
 
       {permitted ? (
         <NotificationsSwitch
-          isChecked={state.allowNotifications ? "checked" : "unchecked"}
+          isChecked={settingsState.allowNotifications ? "checked" : "unchecked"}
           onClick={handleClick}
           permitted={permitted}
         />
       ) : (
         <NotificationTooltip>
           <NotificationsSwitch
-            isChecked={state.allowNotifications ? "checked" : "unchecked"}
+            isChecked={
+              settingsState.allowNotifications ? "checked" : "unchecked"
+            }
             onClick={handleClick}
             permitted={permitted}
           />

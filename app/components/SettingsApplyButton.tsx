@@ -39,10 +39,18 @@ export default function SettingsApplyButton({
     "pomodoroTimes",
     phaseTimes
   );
+  const [_storedNotificationSettings, setStoredNotificationSettings] =
+    useLocalStorage<boolean | null>("allowNotifications", null);
 
   function applySettings() {
     setStoredTimes(settingsState.phaseTimes);
+    setStoredNotificationSettings(settingsState.allowNotifications);
+
     dispatch({ type: "updateTimes", payload: settingsState.phaseTimes });
+    dispatch({
+      type: "allowNotifications",
+      payload: settingsState.allowNotifications,
+    });
 
     onCloseModal?.();
   }

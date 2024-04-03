@@ -31,14 +31,6 @@ export default function useNotification({
           payload: allowNotifications,
         });
       }
-
-      if (storedPermission === "granted") {
-        setStoredNotificationSettings(allowNotifications);
-        dispatch({
-          type: "allowNotifications",
-          payload: allowNotifications,
-        });
-      }
     }
 
     requestNotificationPermission();

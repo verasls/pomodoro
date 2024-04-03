@@ -125,10 +125,8 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
       null
     );
 
-  const [_, setStoredNotificationSettings] = useLocalStorage<boolean | null>(
-    "allowNotifications",
-    null
-  );
+  const [storedNotificationSettings, setStoredNotificationSettings] =
+    useLocalStorage<boolean | null>("allowNotifications", null);
 
   const [storedTimes] = useLocalStorage<Record<Phase, number>>(
     "pomodoroTimes",
@@ -151,7 +149,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
     time: initialPhaseTimes[initialPhase],
     numCycles: 0,
     notificationPermission: storedPermission,
-    allowNotifications: null,
+    allowNotifications: storedNotificationSettings,
     sendNotification: false,
   };
 
