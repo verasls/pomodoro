@@ -9,12 +9,17 @@ type SettingsState = {
 
 type SettingsAction =
   | { type: "updateTimes"; payload: Record<Phase, number> }
+  | { type: "updateNotification"; payload: boolean | null }
   | { type: "applySettings" };
 
 function reducer(state: SettingsState, action: SettingsAction) {
   switch (action.type) {
     case "updateTimes":
       return { ...state, phaseTimes: action.payload };
+
+    case "updateNotification": {
+      return { ...state, allowNotifications: action.payload };
+    }
 
     default:
       throw new Error("Unknown action");

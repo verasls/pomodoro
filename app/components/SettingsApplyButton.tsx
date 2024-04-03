@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import useLocalStorage from "../hooks/useLocalStorage";
 import {
   Phase,
   phaseTimes,
   usePomodoroContext,
 } from "../context/PomodoroContext";
 import { useSettingsContext } from "../context/SettingsContext";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const ButtonContainer = styled.div`
   justify-content: center;
@@ -35,14 +35,22 @@ export default function SettingsApplyButton({
 }: SettingsApplyButtonProps) {
   const { dispatch } = usePomodoroContext();
   const { settingsState } = useSettingsContext();
-  const [_, setStoredTimes] = useLocalStorage<Record<Phase, number>>(
+  const [_storedTimes, setStoredTimes] = useLocalStorage<Record<Phase, number>>(
     "pomodoroTimes",
     phaseTimes
   );
+  const [_storedNotificationSettings, setStoredNotificationSettings] =
+    useLocalStorage<boolean | null>("allowNotifications", null);
 
   function applySettings() {
     setStoredTimes(settingsState.phaseTimes);
+    setStoredNotificationSettings(settingsState.allowNotifications);
+
     dispatch({ type: "updateTimes", payload: settingsState.phaseTimes });
+    dispatch({
+      type: "allowNotifications",
+      payload: settingsState.allowNotifications,
+    });
 
     onCloseModal?.();
   }
