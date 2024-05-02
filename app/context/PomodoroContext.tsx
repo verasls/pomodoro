@@ -170,7 +170,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
     state,
     dispatch,
   });
-  useSettings({ storedTimes, dispatch });
+  useSettings({ storedTimes, state, dispatch });
 
   return (
     <PomodoroContext.Provider value={{ state, dispatch }}>

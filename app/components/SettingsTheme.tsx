@@ -15,6 +15,10 @@ import { ThemeValues } from "../context/PomodoroContext";
 const StyledSettingsTheme = styled.div`
   justify-content: space-between;
 
+  & h3 {
+    color: var(--gray);
+  }
+
   @media (max-width: 630px) {
     flex-direction: column;
   }
@@ -34,6 +38,7 @@ const SelectTrigger = styled(Select.Trigger)`
   gap: 0.4rem;
   background-color: var(--secondary-color);
   border: none;
+  color: var(--gray);
 
   & div {
     gap: 0.4rem;
@@ -54,7 +59,7 @@ const SelectViewport = styled(Select.Viewport)`
 const StyledSelectItem = styled(Select.Item)`
   font-size: 13px;
   font-weight: 400;
-  color: var(--text-color);
+  color: var(--gray);
   line-height: 1;
   border-radius: 3px;
   display: flex;
@@ -69,6 +74,7 @@ const StyledSelectItem = styled(Select.Item)`
     gap: 0.4rem;
     align-items: center;
     justify-content: center;
+    color: var(--gray);
   }
 
   &[data-highlighted] {

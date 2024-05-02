@@ -17,6 +17,17 @@ const styles = css`
       --shadow-small: 5px 10px 30px 0px rgba(0, 0, 0, 0.15);
       --shadow-large: 10px 20px 30px 0px rgba(0, 0, 0, 0.15);
     }
+
+    &.dark-mode {
+      --bg-color: #1e2140;
+      --text-color: #fff;
+      --primary-color: #151932;
+      --secondary-color: #e0e7ff;
+      --accent-color: #f57375;
+      --backdrop-color: rgba(248, 249, 250, 0);
+      --shadow-small: none;
+      --shadow-large: 50px 50px 100px #111223, -50px -50px 100px #2c305d;
+    }
   }
 
   *,
@@ -34,6 +45,7 @@ const styles = css`
   body {
     font-family: "Rubik", sans-serif;
     color: var(--text-color);
+    background-color: var(--bg-color);
   }
 
   body,

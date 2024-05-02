@@ -14,6 +14,7 @@ const StyledSettingsTime = styled.div`
   justify-content: space-between;
 
   & h3 {
+    color: var(--gray);
     width: 100%;
     margin: 0.8rem 0;
   }
@@ -34,7 +35,7 @@ const StyledSettingsTime = styled.div`
 
   & input {
     background-color: var(--secondary-color);
-    color: var(--text-color);
+    color: var(--gray);
     height: 36px;
     width: -webkit-fill-available;
     padding: 20px;
