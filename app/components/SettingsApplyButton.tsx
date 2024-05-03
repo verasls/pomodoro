@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {
   Phase,
+  ThemeValues,
   phaseTimes,
   usePomodoroContext,
 } from "../context/PomodoroContext";
@@ -39,14 +40,20 @@ export default function SettingsApplyButton({
     "pomodoroTimes",
     phaseTimes
   );
+  const [_storedTheme, setStoredTheme] = useLocalStorage<ThemeValues>(
+    "theme",
+    "light"
+  );
   const [_storedNotificationSettings, setStoredNotificationSettings] =
     useLocalStorage<boolean | null>("allowNotifications", null);
 
   function applySettings() {
     setStoredTimes(settingsState.phaseTimes);
+    setStoredTheme(settingsState.theme);
     setStoredNotificationSettings(settingsState.allowNotifications);
 
     dispatch({ type: "updateTimes", payload: settingsState.phaseTimes });
+    dispatch({ type: "updateTheme", payload: settingsState.theme });
     dispatch({
       type: "allowNotifications",
       payload: settingsState.allowNotifications,

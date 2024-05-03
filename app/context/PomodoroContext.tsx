@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import React, { createContext, useContext, useReducer } from "react";
 import {
   LONG_BREAK_TIME,
   SHORT_BREAK_TIME,
@@ -7,6 +7,7 @@ import {
 import useLocalStorage from "../hooks/useLocalStorage";
 import useNotification from "../hooks/useNotification";
 import useSettings from "../hooks/useSettings";
+import useTheme from "../hooks/useTheme";
 
 type Phase = "Work" | "Short break" | "Long break";
 const phases: Array<Phase> = ["Work", "Short break", "Long break"];
@@ -16,6 +17,8 @@ const phaseTimes: Record<Phase, number> = {
   "Short break": SHORT_BREAK_TIME,
   "Long break": LONG_BREAK_TIME,
 };
+
+type ThemeValues = "default" | "light" | "dark";
 
 type State = {
   phase: Phase;
@@ -27,6 +30,7 @@ type State = {
   notificationPermission: NotificationPermission | null;
   allowNotifications: boolean | null;
   sendNotification: boolean;
+  theme: ThemeValues;
 };
 
 type Action =
@@ -36,6 +40,7 @@ type Action =
   | { type: "controlTimer" }
   | { type: "changePhase"; payload: Phase }
   | { type: "updateTimes"; payload: Record<Phase, number> }
+  | { type: "updateTheme"; payload: ThemeValues }
   | { type: "setNotificationPermission"; payload: NotificationPermission }
   | { type: "allowNotifications"; payload: boolean | null }
   | { type: "turnNotificationOff" };
@@ -91,6 +96,9 @@ function reducer(state: State, action: Action) {
         time: action.payload[state.phase],
       };
 
+    case "updateTheme":
+      return { ...state, theme: action.payload };
+
     case "setNotificationPermission":
       return { ...state, notificationPermission: action.payload };
 
@@ -125,6 +133,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
       null
     );
 
+  const [storedTheme] = useLocalStorage<ThemeValues>("theme", "default");
   const [storedNotificationSettings, setStoredNotificationSettings] =
     useLocalStorage<boolean | null>("allowNotifications", null);
 
@@ -151,6 +160,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
     notificationPermission: storedPermission,
     allowNotifications: storedNotificationSettings,
     sendNotification: false,
+    theme: storedTheme,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -161,7 +171,8 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
     state,
     dispatch,
   });
-  useSettings({ storedTimes, dispatch });
+  useTheme(state);
+  useSettings({ storedTimes, state, dispatch });
 
   return (
     <PomodoroContext.Provider value={{ state, dispatch }}>
@@ -180,4 +191,4 @@ function usePomodoroContext() {
 }
 
 export { PomodoroProvider, usePomodoroContext, phaseTimes };
-export type { State, Action, Phase };
+export type { State, Action, Phase, ThemeValues };

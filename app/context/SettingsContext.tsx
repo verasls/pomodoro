@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { Phase, usePomodoroContext } from "./PomodoroContext";
+import { Phase, ThemeValues, usePomodoroContext } from "./PomodoroContext";
 
 type SettingsState = {
   phaseTimes: Record<Phase, number>;
@@ -10,6 +10,7 @@ type SettingsState = {
 type SettingsAction =
   | { type: "updateTimes"; payload: Record<Phase, number> }
   | { type: "updateNotification"; payload: boolean | null }
+  | { type: "updateTheme"; payload: ThemeValues }
   | { type: "applySettings" };
 
 function reducer(state: SettingsState, action: SettingsAction) {
@@ -19,6 +20,10 @@ function reducer(state: SettingsState, action: SettingsAction) {
 
     case "updateNotification": {
       return { ...state, allowNotifications: action.payload };
+    }
+
+    case "updateTheme": {
+      return { ...state, theme: action.payload };
     }
 
     default:
@@ -44,7 +49,7 @@ function SettingsProvider({ children }: SettingsProviderProps) {
 
   const initialSettingsState: SettingsState = {
     phaseTimes: state.phaseTimes,
-    theme: "default",
+    theme: state.theme,
     allowNotifications: state.allowNotifications,
   };
 

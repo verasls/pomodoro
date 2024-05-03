@@ -10,6 +10,7 @@ const MenuContainer = styled.div`
   box-shadow: var(--shadow-small);
   margin: 1.6rem 0;
   padding: 5px;
+  z-index: 5;
 `;
 
 export default function Menu() {

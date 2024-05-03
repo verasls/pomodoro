@@ -7,6 +7,7 @@ const StyledHeader = styled.div`
   width: 100%;
 
   & h2 {
+    color: var(--gray);
     margin: 0.4rem 0;
   }
 `;
@@ -18,6 +19,7 @@ const Button = styled.button`
   justify-content: center;
   padding: 3px;
   border-radius: 50%;
+  color: var(--gray);
 
   &:hover {
     background-color: var(--secondary-color);

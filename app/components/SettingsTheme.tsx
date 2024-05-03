@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import * as Select from "@radix-ui/react-select";
 import {
@@ -9,9 +9,15 @@ import {
   SunIcon,
 } from "@radix-ui/react-icons";
 import Heading from "./Heading";
+import { useSettingsContext } from "../context/SettingsContext";
+import { ThemeValues } from "../context/PomodoroContext";
 
 const StyledSettingsTheme = styled.div`
   justify-content: space-between;
+
+  & h3 {
+    color: var(--gray);
+  }
 
   @media (max-width: 630px) {
     flex-direction: column;
@@ -32,6 +38,7 @@ const SelectTrigger = styled(Select.Trigger)`
   gap: 0.4rem;
   background-color: var(--secondary-color);
   border: none;
+  color: var(--gray);
 
   & div {
     gap: 0.4rem;
@@ -52,7 +59,7 @@ const SelectViewport = styled(Select.Viewport)`
 const StyledSelectItem = styled(Select.Item)`
   font-size: 13px;
   font-weight: 400;
-  color: var(--text-color);
+  color: var(--gray);
   line-height: 1;
   border-radius: 3px;
   display: flex;
@@ -67,6 +74,7 @@ const StyledSelectItem = styled(Select.Item)`
     gap: 0.4rem;
     align-items: center;
     justify-content: center;
+    color: var(--gray);
   }
 
   &[data-highlighted] {
@@ -84,18 +92,20 @@ const SelectItemIndicator = styled(Select.ItemIndicator)`
   justify-content: center;
 `;
 
-type ThemeValues = "default" | "light" | "dark";
-
 export default function SettingsTheme() {
-  const [value, setValue] = useState<ThemeValues>("default");
+  const { settingsState, settingsDispatch } = useSettingsContext();
+
+  function handleInputChange(event: ThemeValues) {
+    settingsDispatch({ type: "updateTheme", payload: event });
+  }
 
   return (
     <StyledSettingsTheme>
       <Heading as="h3">Theme</Heading>
 
       <Select.Root
-        value={value}
-        onValueChange={(value: ThemeValues) => setValue(value)}
+        value={settingsState.theme}
+        onValueChange={handleInputChange}
       >
         <SelectTrigger>
           <Select.Value placeholder="Select theme" />
