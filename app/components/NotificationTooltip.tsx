@@ -1,6 +1,6 @@
-import styled from "styled-components";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import React from "react";
+import styled from "styled-components";
 
 const TooltipContent = styled(Tooltip.Content)`
   width: 16rem;

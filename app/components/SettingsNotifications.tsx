@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { useSettingsContext } from "../context/SettingsContext";
-import useLocalStorage from "../hooks/useLocalStorage";
 import Heading from "./Heading";
 import NotificationsSwitch from "./NotificationSwitch";
 import NotificationTooltip from "./NotificationTooltip";
+import { useSettingsContext } from "../context/SettingsContext";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const StyledSettingsNotifications = styled.div`
   justify-content: space-between;

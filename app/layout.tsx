@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
+import type { Metadata } from "next";
 import StyledComponentsRegistry from "@/lib/registry";
 import GlobalStyles from "./GlobalStyles";
 import "@/app/index.css";

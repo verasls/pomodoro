@@ -1,13 +1,13 @@
+import React from "react";
 import styled from "styled-components";
-import { Phase } from "../context/PomodoroContext";
 import Heading from "./Heading";
+import { Phase } from "../context/PomodoroContext";
+import { useSettingsContext } from "../context/SettingsContext";
 import {
   LONG_BREAK_TIME,
   SHORT_BREAK_TIME,
   WORK_TIME,
 } from "../utils/constants";
-import React from "react";
-import { useSettingsContext } from "../context/SettingsContext";
 
 const StyledSettingsTime = styled.div`
   flex-wrap: wrap;

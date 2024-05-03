@@ -1,6 +1,6 @@
+import * as Switch from "@radix-ui/react-switch";
 import React from "react";
 import styled from "styled-components";
-import * as Switch from "@radix-ui/react-switch";
 
 const SwitchRoot = styled(Switch.Root)`
   all: unset;

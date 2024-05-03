@@ -1,6 +1,3 @@
-import React from "react";
-import styled from "styled-components";
-import * as Select from "@radix-ui/react-select";
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -8,9 +5,12 @@ import {
   MoonIcon,
   SunIcon,
 } from "@radix-ui/react-icons";
+import * as Select from "@radix-ui/react-select";
+import React from "react";
+import styled from "styled-components";
 import Heading from "./Heading";
-import { useSettingsContext } from "../context/SettingsContext";
 import { ThemeValues } from "../context/PomodoroContext";
+import { useSettingsContext } from "../context/SettingsContext";
 
 const StyledSettingsTheme = styled.div`
   justify-content: space-between;

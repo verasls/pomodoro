@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { SettingsIcon } from "lucide-react";
+import styled from "styled-components";
 import Modal from "./Modal";
 import SettingsModal from "./SettingsModal";
 
