@@ -2,10 +2,10 @@ This is a React implementation of a [Pomodoro timer](https://en.wikipedia.org/wi
 
 ## Features
 
-- [x] Start, stop and restart the timer
-- [x] Notification when the timer ends
-- [ ] Light and dark modes
-- [x] Customizable timer durations
+-   [x] Start, stop and restart the timer
+-   [x] Notification when the timer ends
+-   [x] Light and dark modes
+-   [x] Customizable timer durations
 
 ---
 
