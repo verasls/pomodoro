@@ -5,6 +5,7 @@ import {
   WORK_TIME,
 } from "../utils/constants";
 import useLocalStorage from "../hooks/useLocalStorage";
+import useTitle from "../hooks/useTitle";
 import useNotification from "../hooks/useNotification";
 import useSettings from "../hooks/useSettings";
 import useTheme from "../hooks/useTheme";
@@ -164,6 +165,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
+  useTitle(state);
   useNotification({
     storedPermission,
     setStoredPermission,
