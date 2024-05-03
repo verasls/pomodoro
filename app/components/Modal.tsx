@@ -31,6 +31,7 @@ const StyledModal = styled.div`
   padding: 1rem 2rem;
   border-radius: 20px;
   transition: all 0.5s;
+  z-index: 9;
 `;
 
 type ModalContextValue = {
