@@ -1,11 +1,10 @@
 {
   "extends": "next/core-web-vitals",
-  "plugins": ["simple-import-sort"],
+  "plugins": ["simple-import-sort", "import"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": "latest"
   },
-  "plugins": ["simple-import-sort", "import"],
   "rules": {
     "sort-imports": [
       "error",
