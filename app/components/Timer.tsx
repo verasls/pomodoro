@@ -1,6 +1,6 @@
+import { Pause, Play, RefreshCcw } from "lucide-react";
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Pause, Play, RefreshCcw } from "lucide-react";
 import { usePomodoroContext } from "../context/PomodoroContext";
 
 const TimerWrapper = styled.div`

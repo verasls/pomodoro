@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useReducer } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
+import useNotification from "../hooks/useNotification";
+import useSettings from "../hooks/useSettings";
+import useTheme from "../hooks/useTheme";
+import useTitle from "../hooks/useTitle";
 import {
   LONG_BREAK_TIME,
   SHORT_BREAK_TIME,
   WORK_TIME,
 } from "../utils/constants";
-import useLocalStorage from "../hooks/useLocalStorage";
-import useTitle from "../hooks/useTitle";
-import useNotification from "../hooks/useNotification";
-import useSettings from "../hooks/useSettings";
-import useTheme from "../hooks/useTheme";
 
 type Phase = "Work" | "Short break" | "Long break";
 const phases: Array<Phase> = ["Work", "Short break", "Long break"];

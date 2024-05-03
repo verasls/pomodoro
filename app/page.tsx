@@ -4,8 +4,8 @@ import styled from "styled-components";
 import Heading from "./components/Heading";
 import Menu from "./components/Menu";
 import PomodoroTimer from "./components/PomodoroTimer";
-import { PomodoroProvider } from "./context/PomodoroContext";
 import Settings from "./components/Settings";
+import { PomodoroProvider } from "./context/PomodoroContext";
 
 const Main = styled.main`
   display: flex;

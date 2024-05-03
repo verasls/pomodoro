@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { SettingsProvider } from "../context/SettingsContext";
+import SettingsApplyButton from "./SettingsApplyButton";
 import SettingsHeader from "./SettingsHeader";
-import SettingsTime from "./SettingsTime";
 import SettingsNotification from "./SettingsNotifications";
 import SettingsTheme from "./SettingsTheme";
-import SettingsApplyButton from "./SettingsApplyButton";
+import SettingsTime from "./SettingsTime";
+import { SettingsProvider } from "../context/SettingsContext";
 
 const StyledSettingsModal = styled.div`
   background-color: var(--white);
