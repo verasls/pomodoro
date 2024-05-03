@@ -7,6 +7,7 @@ import {
 import useLocalStorage from "../hooks/useLocalStorage";
 import useNotification from "../hooks/useNotification";
 import useSettings from "../hooks/useSettings";
+import useTheme from "../hooks/useTheme";
 
 type Phase = "Work" | "Short break" | "Long break";
 const phases: Array<Phase> = ["Work", "Short break", "Long break"];
@@ -132,7 +133,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
       null
     );
 
-  const [storedTheme] = useLocalStorage<ThemeValues>("theme", "light");
+  const [storedTheme] = useLocalStorage<ThemeValues>("theme", "default");
   const [storedNotificationSettings, setStoredNotificationSettings] =
     useLocalStorage<boolean | null>("allowNotifications", null);
 
@@ -170,6 +171,7 @@ function PomodoroProvider({ children }: PomodoroProviderProps) {
     state,
     dispatch,
   });
+  useTheme(state);
   useSettings({ storedTimes, state, dispatch });
 
   return (
