@@ -8,7 +8,8 @@ import { SettingsProvider } from "../context/SettingsContext";
 
 const StyledSettingsModal = styled.div`
   background-color: var(--white);
-  width: 100%;
+  min-width: 240px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
